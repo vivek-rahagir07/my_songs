@@ -67,7 +67,6 @@
 
         .card-3d {
             transform-style: preserve-3d;
-            transform: perspective(1200px) rotateX(10deg);
         }
 
         .sidebar-animate {
@@ -105,14 +104,16 @@
             }
         }
 
-        .is-playing-ring {
-            animation: glowPulse 2.4s ease-in-out infinite;
-        }
+        
 
+        @keyframes diskSpin {
+            from {
+                transform: rotate(0deg);
+            }
 
-
-        .disk-rotate {
-            animation: none 18s linear infinite;
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .tracklist-container::-webkit-scrollbar,
@@ -141,26 +142,53 @@
 
         @media (max-width: 768px) {
             .app-container {
-                height: auto;
-                max-height: none;
+                height: calc(100vh - 8rem);
+                max-height: calc(100vh - 8rem);
             }
         }
 
         #progress-container {
-            background: linear-gradient(to right, rgba(31, 41, 55, 0.9), rgba(3, 7, 18, 0.9));
+            background: rgba(75, 85, 99, 0.5);
         }
 
         #progress-bar {
             background: linear-gradient(90deg, #22c55e, #a855f7, #ec4899);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+            transition: width 0.1s linear;
         }
 
-        input[type=range]::-webkit-slider-runnable-track {
+        input[type=range]:not(#seek-slider) {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
             background: #4b5563;
+            border-radius: 3px;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
         }
 
-        input[type=range]::-webkit-slider-thumb {
+        input[type=range]:not(#seek-slider)::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
             background: var(--primary-green);
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(30, 215, 96, 0.8);
         }
+
+        input[type=range]:not(#seek-slider)::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            cursor: pointer;
+            border: none;
+        }
+
 
         .eq-bar {
             flex: 1;
@@ -171,12 +199,110 @@
                 0 0 22px rgba(168, 85, 247, 0.55);
             height: 15%;
             transition: height 0.1s ease-out;
+            will-change: height;
         }
 
         .mini-ring {
             box-shadow:
                 0 0 12px rgba(30, 215, 96, 0.6),
                 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .track-row:hover {
+            background-color: rgba(38, 38, 38, 0.5);
+        }
+
+        .track-row.is-playing {
+            background-color: rgba(30, 215, 96, 0.15);
+            border-left: 3px solid var(--primary-green);
+            padding-left: calc(1.5rem - 3px);
+        }
+
+        .track-row.is-playing .track-index {
+            color: var(--primary-green);
+            font-weight: 700;
+        }
+
+        input[type=range]:not(#seek-slider) {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #4b5563;
+            border-radius: 3px;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        #seek-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 100%;
+            background: transparent;
+            cursor: pointer;
+            z-index: 20;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #seek-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(30, 215, 96, 0.8);
+            opacity: 0;
+            transition: opacity 0.1s ease;
+        }
+
+        #progress-control:hover #seek-slider::-webkit-slider-thumb,
+        #seek-slider:active::-webkit-slider-thumb {
+            opacity: 1;
+        }
+
+        #seek-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            cursor: pointer;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.1s ease;
+        }
+
+        #progress-control:hover #seek-slider::-moz-range-thumb,
+        #seek-slider:active::-moz-range-thumb {
+            opacity: 1;
+        }
+
+        #seek-slider::-webkit-slider-runnable-track {
+            height: 12px;
+            background: transparent;
+        }
+
+        #seek-slider::-moz-range-track {
+            height: 12px;
+            background: transparent;
+        }
+
+        #progress-control {
+            display: flex;
+            align-items: center;
+            height: 12px;
+        }
+
+        #progress-container {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 100%;
+            z-index: 10;
         }
     </style>
 </head>
@@ -220,7 +346,7 @@
                                 class="flex items-center space-x-3 text-gray-400 hover:text-white transition duration-150">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                     <path
-                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM11 15v-1.5c0-.83-.67-1.5-1.5-1.5S8 12.67 8 13.5V15h-.5a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H11z" />
+                                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM11 15v-1.5c0-.83-.67-1.5-1.5-1.5S8 12.67 8 13.5V15h-.5a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-2a1 1 0 00-1-1H11z" />
                                 </svg>
                                 <span>Your Library</span>
                             </a>
@@ -249,8 +375,8 @@
                         <div
                             class="relative w-32 h-32 md:w-44 md:h-44 rounded-2xl bg-black/60 overflow-hidden flex items-center justify-center">
                             <div id="icon-glow-container"
-                                class="absolute inset-0 flex items-center justify-center rounded-2xl is-playing-ring">
-                                <div
+                                class="absolute inset-0 flex items-center justify-center rounded-2xl">
+                                <div id="icon-ring"
                                     class="w-24 h-24 rounded-full border border-emerald-400/40 bg-gradient-to-br from-emerald-500/20 via-rose-500/15 to-sky-500/25 flex items-center justify-center">
                                     <svg id="main-icon" class="w-12 h-12 text-white/90" fill="currentColor"
                                         viewBox="0 0 24 24">
@@ -260,8 +386,9 @@
                                 </div>
                             </div>
                             <div id="album-art-disk"
-                                class="absolute inset-5 rounded-full overflow-hidden border border-white/10 shadow-lg">
-                                <img id="album-photo" src="photo/arijit.png"
+                                class="disk-rotate absolute inset-5 rounded-full overflow-hidden border border-white/10 shadow-lg">
+                                <img id="album-photo" src="https://placehold.co/100x100/ec4899/ffffff?text=A"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/ec4899/ffffff?text=A';"
                                     class="w-full h-full object-cover rounded-full" />
                             </div>
 
@@ -274,7 +401,7 @@
                                 Arijit Singh Hits
                             </h1>
                             <p id="current-info-text" class="text-sm md:text-base text-slate-200/90 mt-3 font-medium">
-                                Ready to play: <span id="current-title" class="font-bold text-white"></span>
+                                Ready to play: <span id="current-title" class="font-bold text-white">Select a track</span>
                             </p>
                             <p class="text-xs md:text-sm text-slate-300 mt-2 flex items-center gap-2">
                                 <span id="total-track-count" class="font-semibold"></span> romantic tracks •
@@ -299,7 +426,7 @@
                             <div class="w-16 text-right hidden md:block">TYPE</div>
                         </div>
 
-                        <div id="tracklist" class="tracklist-container flex-1 px-6 pb-4 pt-1 space-y-1 overflow-y-auto">
+                        <div id="tracklist" class="tracklist-container flex-1 pt-1 space-y-1 overflow-y-auto">
                         </div>
                     </div>
 
@@ -308,7 +435,7 @@
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="text-xs font-semibold tracking-[0.25em] uppercase text-slate-300">Lyrics</h3>
                                 <span
-                                    class="text-[10px] px-2 py-0.5 rounded-full bg-black/50 text-slate-400">Scroll</span>
+                                    class="text-[10px] px-2 py-0.5 rounded-full bg-black/50 text-slate-400">Placeholder</span>
                             </div>
                             <p id="lyrics-content" class="text-xs leading-relaxed text-slate-200 whitespace-pre-wrap">
                             </p>
@@ -348,17 +475,18 @@
 
                 <div class="flex items-center gap-4 md:gap-5">
 
-                    <button id="shuffle-btn"
+                    <button id="shuffle-btn" title="Shuffle (S)"
                         class="text-slate-400 hover:text-emerald-400 transition p-1 rounded-full hover:bg-slate-800/80 text-xs">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.47 6.64a1 1 0 00-1.414-1.414L12 8.586l-2.121-2.121a1 1 0 00-1.414 1.414L10.586 10l-2.121 2.121a1 1 0 001.414 1.414L12 11.414l3.056 3.056a1 1 0 001.414-1.414L13.414 10l3.056-3.056z"
+                                clip-rule="evenodd" />
                             <path
-                                d="M4 4a1 1 0 000 2h1.586l2.828 2.828-1.415 1.415A3 3 0 007.172 14H4a1 1 0 100 2h3.172a5 5 0 003.536-1.464l1.415-1.414L16.586 16H15a1 1 0 100 2h4v-4a1 1 0 10-2 0v1.586l-2.121-2.122-2.829-2.828L8.414 4H4z" />
-                            <path
-                                d="M15 4a1 1 0 100 2h1v1a1 1 0 102 0V4h-3zM4 16a1 1 0 011-1H6a1 1 0 110 2H5a1 1 0 01-1-1z" />
+                                d="M9 16a1 1 0 011-1h4a1 1 0 100-2h-4a1 1 0 110-2h4a1 1 0 100-2h-4a1 1 0 110-2h4a1 1 0 100-2H9a1 1 0 01-1-1V5a1 1 0 10-2 0v10a1 1 0 001 1h8a1 1 0 100-2h-7z" />
                         </svg>
                     </button>
 
-                    <button id="prev-btn"
+                    <button id="prev-btn" title="Previous Track (Left Arrow)"
                         class="text-slate-300 hover:text-white transition p-1 rounded-full hover:bg-slate-800/80 disabled:opacity-30">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -367,7 +495,7 @@
                         </svg>
                     </button>
 
-                    <button id="play-pause-btn"
+                    <button id="play-pause-btn" title="Play / Pause (Spacebar)"
                         class="bg-white text-slate-900 p-3 rounded-full hover:scale-105 transition duration-200 focus:outline-none focus:ring-4 focus:ring-emerald-400/50 shadow-lg shadow-emerald-500/30">
                         <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -381,7 +509,7 @@
                         </svg>
                     </button>
 
-                    <button id="next-btn"
+                    <button id="next-btn" title="Next Track (Right Arrow)"
                         class="text-slate-300 hover:text-white transition p-1 rounded-full hover:bg-slate-800/80 disabled:opacity-30">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -390,49 +518,57 @@
                         </svg>
                     </button>
 
-                    <button id="repeat-btn"
+                    <button id="repeat-btn" title="Repeat (R)"
                         class="text-slate-400 hover:text-emerald-400 transition p-1 rounded-full hover:bg-slate-800/80 text-xs">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path
+                            <path id="repeat-icon-path"
                                 d="M4 4h9a3 3 0 012.83 4H14a1 1 0 100 2h4V6a1 1 0 10-2 0v.126A5.002 5.002 0 0013 2H4a1 1 0 000 2z" />
                             <path
                                 d="M16 16H7a3 3 0 01-2.83-4H6a1 1 0 100-2H2v4a1 1 0 102 0v-.126A5.002 5.002 0 007 18h9a1 1 0 100-2z" />
                         </svg>
+                        <span id="repeat-one-dot"
+                            class="absolute top-1 right-1 w-1 h-1 rounded-full bg-emerald-400 hidden"></span>
                     </button>
                 </div>
 
                 <div class="flex items-center gap-2 w-full max-w-lg">
                     <span id="current-time" class="text-[11px] text-slate-300 tabular-nums">0:00</span>
-                    <div id="progress-container" class="w-full h-1.5 rounded-full cursor-pointer overflow-hidden group">
-                        <div id="progress-bar" class="h-full w-0"></div>
+
+                    <div id="progress-control" class="relative w-full h-4">
+                        <input type="range" id="seek-slider" min="0" max="100" value="0" step="0.1"
+                            class="absolute top-0 left-0 w-full h-full appearance-none bg-transparent opacity-0 z-20 cursor-pointer"
+                            aria-label="Seek track position">
+                        <div id="progress-container" class="w-full rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full w-0"></div>
+                        </div>
                     </div>
+
                     <span id="total-time" class="text-[11px] text-slate-300 tabular-nums">0:00</span>
                 </div>
 
-                <div id="visualizer" class="flex items-end gap-[3px] h-10 w-36 md:w-44 mt-1"></div>
+                <div id="visualizer" class="hidden sm:flex items-end gap-[3px] h-10 w-36 md:w-44 mt-1"></div>
             </div>
 
             <div class="flex items-center gap-3 w-1/3 justify-end">
-                <button id="mute-btn"
+                <button id="mute-btn" title="Mute / Unmute (M)"
                     class="text-slate-300 hover:text-white transition p-1 rounded-full hover:bg-slate-800/80">
-                    <svg id="volume-high-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg id="volume-high-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path
-                            d="M9.383 4.175a.734.734 0 00-.127.185l-.163.268-.04.053-.031.042-3.193 4.887a.75.75 0 00.197.946l.089.057 3.238 2.053a.75.75 0 00.892-.095l.042-.045 3.076-4.576-.012.016a.75.75 0 00-.157-1.07l-.089-.101L6.78 4.75a.75.75 0 011.026-.145l.078.067 1.5 1.5 1.5-1.5z" />
-                        <path d="M14.5 13a.5.5 0 01.5.5v2.5a.5.5 0 01-1 0v-2.5a.5.5 0 01.5-.5z" />
+                            d="M3 10v4h3l4 4V6l-4 4H3zm13.5 4c0-1.33-.67-2.52-1.68-3.23l1.15-1.15c1.48.86 2.53 2.55 2.53 4.38s-1.05 3.52-2.53 4.38l-1.15-1.15c1.01-.71 1.68-1.9 1.68-3.23zM15 12c0 1.09-.59 2.06-1.5 2.58v-5.16c.91.52 1.5 1.49 1.5 2.58z" />
                     </svg>
-                    <svg id="volume-mute-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+                    <svg id="volume-mute-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24">
                         <path
-                            d="M9.383 4.175a.734.734 0 00-.127.185l-.163.268-.04.053-.031.042-3.193 4.887a.75.75 0 00.197.946l.089.057 3.238 2.053a.75.75 0 00.892-.095l.042-.045 3.076-4.576-.012.016a.75.75 0 00-.157-1.07l-.089-.101L6.78 4.75a.75.75 0 011.026-.145l.078.067 1.5 1.5 1.5-1.5z" />
-                        <path d="M15 15.5a.5.5 0 00-.5-.5H11a.5.5 0 000 1h3.5a.5.5 0 00.5-.5z" />
+                            d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.09.05-.18.05-.28zm-4.4-2l4.9 4.9c0-.08.01-.17.01-.26 0-1.77-1.02-3.29-2.5-4.03v-2.21l-2.42-2.42zM19 12c0 .9-.23 1.74-.63 2.5l1.45 1.45C20.47 14.7 21 13.4 21 12c0-2.92-2.31-5.33-5.5-5.91v1.65c2.19.64 3.7 2.49 3.7 4.26zM4.2 4L2.8 5.4l.46.46C3.01 6.54 3 7.24 3 8v8c0 1.77 1.02 3.29 2.5 4.03v-2.21l2.42-2.42 1.55 1.55C8.42 18.25 7 17.16 7 16v-1.61l4.55 4.55.9.9C11.39 19.98 11.69 20 12 20c.32 0 .61-.02.9-.06l2.06 2.06 1.41-1.41L4.2 4z" />
                     </svg>
                 </button>
                 <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5"
-                    class="w-24 h-1.5 rounded-lg appearance-none cursor-pointer accent-emerald-400">
+                    class="w-24 h-1.5 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                    aria-label="Volume Control">
             </div>
         </div>
 
         <div id="mini-player"
-            class="fixed bottom-4 right-4 md:hidden flex items-center gap-2 px-3 py-2 rounded-full glass-subtle mini-ring z-30">
+            class="fixed bottom-28 right-4 md:hidden flex items-center gap-2 px-3 py-2 rounded-full glass-subtle mini-ring z-30">
             <button id="mini-play-btn"
                 class="w-8 h-8 rounded-full bg-white text-slate-900 flex items-center justify-center">
                 <svg id="mini-play-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -443,7 +579,7 @@
                 </svg>
             </button>
             <div class="flex flex-col min-w-0">
-                <span class="text-[11px] font-semibold truncate" id="mini-title">Arijit Singh Hits</span>
+                <span class="text-[11px] font-semibold truncate" id="mini-title">Select a Track</span>
                 <span class="text-[10px] text-slate-300 truncate">Tap to control</span>
             </div>
         </div>
@@ -454,7 +590,6 @@
         let isMuted = false;
         let lastVolume = 0.5;
         let currentTrackIndex = 0;
-        let audioPlayer = null;
         let progressInterval = null;
         let analyser = null;
         let outputNode = null;
@@ -462,34 +597,39 @@
         let visualizerAnimationId = null;
         let isShuffling = false;
         let repeatMode = 'off';
+        let playlist = [];
 
-        const playlistItems = [
-            { title: "Tum Hi Ho (Aashiqui 2)", artist: "Arijit Singh", type: 'audio', url: 'songs/track1.mp3' },
-            { title: "Kesariya (Brahmāstra)", artist: "Arijit Singh", type: 'audio', url: 'songs/track2.mp3' },
-            { title: "Channa Mereya (Ae Dil Hai Mushkil)", artist: "Arijit Singh", type: 'audio', url: 'songs/track3.mp3' },
-            { title: "Jhoome Jo Pathaan (Pathaan)", artist: "Arijit Singh", type: 'audio', url: 'songs/track4.mp3' },
-            { title: "Phir Mohabbat (Murder 2)", artist: "Arijit Singh", type: 'audio', url: 'songs/track5.mp3' },
-            { title: "Pachtaoge (Jaani Ve)", artist: "Arijit Singh", type: 'audio', url: 'songs/track6.mp3' },
-            { title: "Hawayein (Jab Harry Met Sejal)", artist: "Arijit Singh", type: 'audio', url: 'songs/track7.mp3' },
-            { title: "Hamari Adhuri Kahani", artist: "Arijit Singh", type: 'audio', url: 'songs/track8.mp3' },
-            { title: "Tera Yaar Hoon Main", artist: "Arijit Singh", type: 'audio', url: 'songs/track9.mp3' },
-            { title: "Zaalima", artist: "Arijit Singh", type: 'audio', url: 'songs/track10.mp3' },
-            { title: "Ae Dil Hai Mushkil (Title Track)", artist: "Arijit Singh", url: "songs/track11.mp3" },
-            { title: "Gerua (Reprise)", artist: "Arijit Singh", url: "songs/track12.mp3" },
-            { title: "Raabta (Night in Motel)", artist: "Arijit Singh", url: "songs/track13.mp3" },
-            { title: "Khairiyat", artist: "Arijit Singh", url: "songs/track14.mp3" },
-            { title: "Shayad (Love Aaj Kal)", artist: "Arijit Singh", url: "songs/track15.mp3" },
-            { title: "Soch Na Sake (Reprise)", artist: "Arijit Singh", url: "songs/track16.mp3" },
-            { title: "Naina (Dangal)", artist: "Arijit Singh", url: "songs/track17.mp3" },
-            { title: "Samjhawan (Unplugged)", artist: "Arijit Singh", url: "songs/track18.mp3" },
-            { title: "Janam Janam", artist: "Arijit Singh", url: "songs/track19.mp3" },
-            { title: "Rait Zara Si", artist: "Arijit Singh", url: "songs/track20.mp3" }
+        const originalPlaylistItems = [
+            { title: "Tum Hi Ho (Aashiqui 2)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/1ed760/ffffff?text=T' },
+            { title: "Kesariya (Brahmāstra)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/15803d/ffffff?text=K' },
+            { title: "Channa Mereya (Ae Dil Hai Mushkil)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/2563eb/ffffff?text=C' },
+            { title: "Jhoome Jo Pathaan (Pathaan)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/f59e0b/ffffff?text=J' },
+            { title: "Phir Mohabbat (Murder 2)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/dc2626/ffffff?text=P' },
+            { title: "Pachtaoge (Jaani Ve)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/9333ea/ffffff?text=P' },
+            { title: "Hawayein (Jab Harry Met Sejal)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/14b8a6/ffffff?text=H' },
+            { title: "Hamari Adhuri Kahani", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/7c3aed/ffffff?text=H' },
+            { title: "Tera Yaar Hoon Main", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/ef4444/ffffff?text=T' },
+            { title: "Zaalima", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/3b82f6/ffffff?text=Z' },
+            { title: "Ae Dil Hai Mushkil (Title Track)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/ec4899/ffffff?text=A' },
+            { title: "Gerua (Reprise)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/f97316/ffffff?text=G' },
+            { title: "Raabta (Night in Motel)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/a855f7/ffffff?text=R' },
+            { title: "Khairiyat", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/10b981/ffffff?text=K' },
+            { title: "Shayad (Love Aaj Kal)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/22c55e/ffffff?text=S' },
+            { title: "Soch Na Sake (Reprise)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/6366f1/ffffff?text=S' },
+            { title: "Naina (Dangal)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/f43f5e/ffffff?text=N' },
+            { title: "Samjhawan (Unplugged)", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/0ea5e9/ffffff?text=S' },
+            { title: "Janam Janam", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/be185d/ffffff?text=J' },
+            { title: "Rait Zara Si", artist: "Arijit Singh", type: 'audio', url: 'https://placehold.co/100x100/0d9488/ffffff?text=R' }
+        ];
 
-        ]
+        originalPlaylistItems.forEach((item, index) => {
+            item.synthSequence = null;
+            item.duration = 60 + (index * 5);
+        });
 
-        const lyricsData = playlistItems.map((t) => ({
+        const lyricsData = originalPlaylistItems.map((t, index) => ({
             title: t.title,
-            text: `Mood: Romantic • Arijit Vibes\n\nDemo lyrics panel.\n\n\"${t.title}\"`
+            text: `(Intro Music: Warm Strings)\n\n"O Saathi Re..."\n\nDemo playback using Tone.js Synthesizers.\n\nTrack: ${t.title}\nDuration: ${formatTime(t.duration)}\n\n(Vocal Melody enters - high pitch)\n\nThis application simulates audio playback and visualization using the power of the Web Audio API via Tone.js. Since external audio files are restricted, we are using a synthetic sequence to show real-time progress and visualizer functionality.`
         }));
 
         const playPauseBtn = document.getElementById('play-pause-btn');
@@ -507,385 +647,572 @@
         const nextBtn = document.getElementById('next-btn');
         const prevBtn = document.getElementById('prev-btn');
         const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const seekSlider = document.getElementById('seek-slider');
         const currentTimeEl = document.getElementById('current-time');
         const totalTimeEl = document.getElementById('total-time');
         const totalTrackCountEl = document.getElementById('total-track-count');
         const albumArtDiskEl = document.getElementById('album-art-disk');
+        const albumPhotoEl = document.getElementById('album-photo');
+        const iconRingEl = document.getElementById('icon-ring');
         const lyricsContentEl = document.getElementById('lyrics-content');
         const queueListEl = document.getElementById('queue-list');
         const visualizerEl = document.getElementById('visualizer');
         const shuffleBtn = document.getElementById('shuffle-btn');
         const repeatBtn = document.getElementById('repeat-btn');
+        const repeatIconPath = document.getElementById('repeat-icon-path');
+        const repeatOneDot = document.getElementById('repeat-one-dot');
         const miniPlayBtn = document.getElementById('mini-play-btn');
         const miniPlayIcon = document.getElementById('mini-play-icon');
         const miniPauseIcon = document.getElementById('mini-pause-icon');
         const miniTitleEl = document.getElementById('mini-title');
 
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]
+                ];
+            }
+            return array;
+        }
+
         function updateTrackCount() {
-            totalTrackCountEl.textContent = playlistItems.length;
+            totalTrackCountEl.textContent = originalPlaylistItems.length;
         }
 
         function formatTime(totalSeconds) {
-            if (isNaN(totalSeconds) || totalSeconds < 0) return "0:00";
+            if (isNaN(totalSeconds) || totalSeconds === null || totalSeconds < 0) return "0:00";
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = Math.floor(totalSeconds % 60);
             return `${minutes}:${String(seconds).padStart(2, '0')}`;
         }
 
         function initializeTone() {
-            if (audioPlayer) return;
-            outputNode = new Tone.Gain().toDestination();
-            analyser = new Tone.Analyser('fft', 32);
-            outputNode.connect(analyser);
-            audioPlayer = new Tone.Player({
-                volume: Tone.gainToDb(parseFloat(volumeSlider.value)),
-                onload: () => {
-                    if (audioPlayer.buffer) {
-                        totalTimeEl.textContent = formatTime(audioPlayer.buffer.duration);
-                    }
-                    updateUI();
-                }
-            }).connect(outputNode);
-            Tone.Transport.loop = false;
-        }
+            if (outputNode) return;
+            try {
+                const initialVolume = parseFloat(volumeSlider.value);
+                const volume = !isNaN(initialVolume) ? initialVolume : 0.5;
 
-        function startVisualizer() {
-            if (!analyser || eqBars.length === 0) return;
-            if (visualizerAnimationId) return;
-            const animate = () => {
-                if (!isPlaying) {
-                    visualizerAnimationId = null;
-                    return;
-                }
-                const values = analyser.getValue();
-                for (let i = 0; i < eqBars.length; i++) {
-                    const v = values[i % values.length];
-                    const norm = Math.max(0, Math.min(1, (v + 120) / 80));
-                    const h = 8 + norm * 92;
-                    eqBars[i].style.height = `${h}%`;
-                }
-                visualizerAnimationId = requestAnimationFrame(animate);
-            };
-            visualizerAnimationId = requestAnimationFrame(animate);
-        }
+                outputNode = new Tone.Gain(Tone.gainToDb(volume)).toDestination();
 
-        function stopVisualizer() {
-            if (visualizerAnimationId) cancelAnimationFrame(visualizerAnimationId);
-            visualizerAnimationId = null;
-            eqBars.forEach(bar => bar.style.height = '15%');
-        }
+                analyser = new Tone.Analyser('fft', 32);
+                outputNode.connect(analyser);
 
-        function updateProgress() {
-            if (Tone.Transport.state !== 'started') return;
-            if (!audioPlayer || !audioPlayer.buffer) return;
-            const duration = audioPlayer.buffer.duration;
-            const totalSeconds = Tone.Transport.seconds;
-            if (totalSeconds >= duration) {
-                handleTrackEnd();
-                return;
+                playlist = originalPlaylistItems.map((_, index) => index);
+
+                Tone.Transport.start();
+
+            } catch (error) {
+                console.error("Failed to initialize Tone.js:", error);
             }
-            const percent = (totalSeconds / duration) * 100;
-            progressBar.style.width = `${percent}%`;
-            currentTimeEl.textContent = formatTime(totalSeconds);
-            totalTimeEl.textContent = formatTime(duration);
+        }
+
+        function loadTrack(index) {
+            const originalIndex = playlist[index];
+            const track = originalPlaylistItems[originalIndex];
+
+            Tone.Transport.cancel(0);
+            originalPlaylistItems.forEach(item => {
+                if (item.synthSequence) {
+                    item.synthSequence.stop();
+                    item.synthSequence.dispose();
+                    item.synthSequence = null;
+                }
+            });
+
+            track.synthSequence = new Tone.Sequence(
+                (time, note) => {
+                    new Tone.Synth({
+                        oscillator: { type: originalIndex % 2 === 0 ? "sine" : "sawtooth" },
+                        envelope: { attack: 0.02, decay: 0.1, sustain: 0.05, release: 0.3 },
+                    }).connect(outputNode).triggerAttackRelease(note, "8n", time);
+                },
+                ["C4", "E4", "G4", "C5", "G4", "E4"],
+                "1n"
+            );
+
+            Tone.Transport.stop();
+            Tone.Transport.seconds = 0;
+            Tone.Transport.loop = true;
+            Tone.Transport.loopEnd = track.duration;
+
+            track.synthSequence.start(0);
+
+            updateUI(track);
+            updateLyrics(track.title);
+            updateQueue();
+
+            totalTimeEl.textContent = formatTime(track.duration);
+            seekSlider.max = track.duration;
+            seekSlider.value = 0;
+        }
+
+        function startPlayback() {
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
+
+            if (!originalPlaylistItems[playlist[currentTrackIndex]].synthSequence) {
+                loadTrack(currentTrackIndex);
+            }
+
+            const track = originalPlaylistItems[playlist[currentTrackIndex]];
+
+            Tone.Transport.start();
+
+            isPlaying = true;
+            updateUI(track);
+            startVisualizer();
+            startProgressInterval();
+        }
+
+        function pausePlayback() {
+            Tone.Transport.pause();
+            isPlaying = false;
+            updateUI(originalPlaylistItems[playlist[currentTrackIndex]]);
+            stopProgressInterval();
+            stopVisualizer();
+        }
+
+        function togglePlayback() {
+            if (isPlaying) {
+                pausePlayback();
+            } else {
+                startPlayback();
+            }
+        }
+
+        function nextTrack() {
+            pausePlayback();
+            const playlistLength = playlist.length;
+            if (playlistLength === 0) return;
+
+            currentTrackIndex = (currentTrackIndex + 1) % playlistLength;
+
+            loadTrack(currentTrackIndex);
+            startPlayback();
+        }
+
+        function prevTrack() {
+            pausePlayback();
+            const playlistLength = playlist.length;
+            if (playlistLength === 0) return;
+
+            if (Tone.Transport.seconds > 3) {
+                Tone.Transport.seconds = 0;
+            } else {
+                currentTrackIndex = (currentTrackIndex - 1 + playlistLength) % playlistLength;
+                loadTrack(currentTrackIndex);
+            }
+            startPlayback();
         }
 
         function handleTrackEnd() {
             Tone.Transport.stop();
-            clearInterval(progressInterval);
-            progressInterval = null;
+            stopProgressInterval();
+            stopVisualizer();
+
+            const playlistLength = playlist.length;
+
             if (repeatMode === 'one') {
-                Tone.Transport.seconds = 0;
-                startPlayback();
+                selectTrack(currentTrackIndex, true);
                 return;
             }
-            if (isShuffling) {
-                let nextIndex = currentTrackIndex;
-                if (playlistItems.length > 1) {
-                    while (nextIndex === currentTrackIndex) {
-                        nextIndex = Math.floor(Math.random() * playlistItems.length);
-                    }
-                }
-                currentTrackIndex = nextIndex;
-            } else {
-                if (currentTrackIndex === playlistItems.length - 1) {
-                    if (repeatMode === 'all') {
-                        currentTrackIndex = 0;
-                    } else {
-                        isPlaying = false;
-                        updateUI();
-                        return;
-                    }
+
+            if (currentTrackIndex === playlistLength - 1) {
+                if (repeatMode === 'all') {
+                    currentTrackIndex = 0;
+                    selectTrack(currentTrackIndex, true);
                 } else {
-                    currentTrackIndex++;
+                    isPlaying = false;
+                    updateUI(originalPlaylistItems[playlist[currentTrackIndex]]);
+                    progressBar.style.width = '0%';
+                    currentTimeEl.textContent = '0:00';
+                    seekSlider.value = 0;
                 }
+            } else {
+                currentTrackIndex++;
+                selectTrack(currentTrackIndex, true);
             }
-            selectTrack(currentTrackIndex, true);
         }
 
-        function updateLyrics() {
-            const track = playlistItems[currentTrackIndex];
-            const info = lyricsData.find(l => l.title === track.title);
-            lyricsContentEl.textContent = info ? info.text : "";
+        function selectTrack(index, autoPlay = false) {
+            pausePlayback();
+            currentTrackIndex = index;
+            loadTrack(currentTrackIndex);
+            if (autoPlay) {
+                startPlayback();
+            } else {
+                updateUI(originalPlaylistItems[playlist[currentTrackIndex]]);
+            }
+            const trackRow = document.getElementById(`track-row-${playlist[currentTrackIndex]}`);
+            if (trackRow) {
+                tracklistContainer.scrollTo({
+                    top: trackRow.offsetTop - tracklistContainer.offsetHeight / 2,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function startProgressInterval() {
+            if (progressInterval) clearInterval(progressInterval);
+            progressInterval = setInterval(updateProgress, 250);
+        }
+
+        function stopProgressInterval() {
+            if (progressInterval) clearInterval(progressInterval);
+            progressInterval = null;
+        }
+
+        function updateProgress() {
+            const track = originalPlaylistItems[playlist[currentTrackIndex]];
+            if (!track) return;
+
+            const duration = track.duration;
+            const totalSeconds = Tone.Transport.seconds;
+
+            if (totalSeconds >= duration) {
+                handleTrackEnd();
+                return;
+            }
+
+            const percent = (totalSeconds / duration) * 100;
+            progressBar.style.width = `${percent}%`;
+            currentTimeEl.textContent = formatTime(totalSeconds);
+
+            if (document.activeElement !== seekSlider) {
+                seekSlider.value = totalSeconds;
+            }
+        }
+
+        function handleSeekChange() {
+            const newTime = parseFloat(seekSlider.value);
+            Tone.Transport.seconds = newTime;
+
+            const track = originalPlaylistItems[playlist[currentTrackIndex]];
+            const duration = track.duration;
+            const percent = (newTime / duration) * 100;
+            progressBar.style.width = `${percent}%`;
+            currentTimeEl.textContent = formatTime(newTime);
+        }
+
+        function updateUI(track = null) {
+            const currentTrack = track || originalPlaylistItems[playlist[currentTrackIndex]] || { title: "Select a track", artist: "Arijit Singh", url: "https://placehold.co/100x100/ec4899/ffffff?text=A" };
+
+            playIcon.classList.toggle('hidden', isPlaying);
+            pauseIcon.classList.toggle('hidden', !isPlaying);
+            miniPlayIcon.classList.toggle('hidden', isPlaying);
+            miniPauseIcon.classList.toggle('hidden', !isPlaying);
+
+            playerTitleEl.textContent = currentTrack.title;
+            playerArtistEl.textContent = currentTrack.artist;
+            currentTitleEl.textContent = currentTrack.title;
+            miniTitleEl.textContent = currentTrack.title;
+            currentInfoTextEl.innerHTML = isPlaying ?
+                `Now Playing: <span class="font-bold text-white">${currentTrack.title}</span>` :
+                `Ready to play: <span class="font-bold text-white">${currentTrack.title}</span>`;
+
+
+            albumPhotoEl.src = currentTrack.url;
+            albumArtDiskEl.classList.toggle('rotating', isPlaying);
+            iconRingEl.classList.toggle('is-playing-ring', isPlaying);
+
+            volumeHighIcon.classList.toggle('hidden', isMuted);
+            volumeMuteIcon.classList.toggle('hidden', !isMuted);
+
+            document.querySelectorAll('.track-row').forEach(row => {
+                row.classList.remove('is-playing');
+                row.querySelector('.track-index').innerHTML = row.dataset.originalIndex;
+            });
+
+            const playingRow = document.getElementById(`track-row-${playlist[currentTrackIndex]}`);
+            if (playingRow) {
+                playingRow.classList.add('is-playing');
+                playingRow.querySelector('.track-index').innerHTML = isPlaying ?
+                    `<svg class="w-3 h-3 text-emerald-400 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2-9l7 5-7 5V10z" /></svg>` :
+                    `<svg class="w-3 h-3 text-slate-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>`;
+            }
+
+            shuffleBtn.classList.toggle('text-emerald-400', isShuffling);
+            shuffleBtn.classList.toggle('text-slate-400', !isShuffling);
+
+            repeatBtn.classList.toggle('text-emerald-400', repeatMode !== 'off');
+            repeatBtn.classList.toggle('text-slate-400', repeatMode === 'off');
+            repeatOneDot.classList.toggle('hidden', repeatMode !== 'one');
+
+            if (repeatMode === 'one') {
+                repeatIconPath.setAttribute('d', 'M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v3z');
+            } else {
+                repeatIconPath.setAttribute('d', 'M4 4h9a3 3 0 012.83 4H14a1 1 0 100 2h4V6a1 1 0 10-2 0v.126A5.002 5.002 0 0013 2H4a1 1 0 000 2zM16 16H7a3 3 0 01-2.83-4H6a1 1 0 100-2H2v4a1 1 0 102 0v-.126A5.002 5.002 0 007 18h9a1 1 0 100-2z');
+            }
+        }
+
+        function updateLyrics(trackTitle) {
+            const info = lyricsData.find(l => l.title === trackTitle);
+            lyricsContentEl.textContent = info ? info.text : "No lyrics available for this placeholder track.";
         }
 
         function updateQueue() {
             queueListEl.innerHTML = '';
-            const maxNext = Math.min(3, playlistItems.length - 1);
-            for (let i = 1; i <= maxNext; i++) {
-                const idx = (currentTrackIndex + i) % playlistItems.length;
-                const item = playlistItems[idx];
+            const playlistLength = playlist.length;
+            if (playlistLength <= 1) {
+                queueListEl.innerHTML = '<p class="text-slate-400 text-center py-2">Queue will show next tracks.</p>';
+                return;
+            }
+
+            const tracksToShow = Math.min(3, playlistLength - 1);
+
+            for (let i = 1; i <= tracksToShow; i++) {
+                const nextIndexInPlaylist = (currentTrackIndex + i) % playlistLength;
+                const originalIndex = playlist[nextIndexInPlaylist];
+                const item = originalPlaylistItems[originalIndex];
+
                 const row = document.createElement('div');
-                row.className = 'flex items-center gap-2 text-slate-200/90';
+                row.className = 'flex items-center gap-2 text-slate-200/90 hover:text-white transition';
                 row.innerHTML = `
-            <span class="w-4 text-[10px] text-slate-500 tabular-nums">${idx + 1}</span>
-            <div class="flex-1 min-w-0">
-                <div class="truncate">${item.title}</div>
-                <div class="text-[10px] text-slate-400 truncate">${item.artist}</div>
-            </div>
-        `;
+                    <span class="text-slate-500 w-4">${i}.</span>
+                    <span class="truncate text-xs">${item.title}</span>
+                `;
                 queueListEl.appendChild(row);
             }
         }
 
-        function updateUI() {
-            const currentItem = playlistItems[currentTrackIndex];
-            currentTitleEl.textContent = currentItem.title;
-            playerTitleEl.textContent = currentItem.title;
-            playerArtistEl.textContent = currentItem.artist;
-            miniTitleEl.textContent = currentItem.title;
-            if (isPlaying) {
-                playIcon.classList.add('hidden');
-                pauseIcon.classList.remove('hidden');
-                miniPlayIcon.classList.add('hidden');
-                miniPauseIcon.classList.remove('hidden');
-                currentInfoTextEl.innerHTML = `Currently playing: <span class="font-bold text-white">${currentItem.title}</span>`;
-                albumArtDiskEl.classList.add('disk-rotate');
-            } else {
-                playIcon.classList.remove('hidden');
-                pauseIcon.classList.add('hidden');
-                miniPlayIcon.classList.remove('hidden');
-                miniPauseIcon.classList.add('hidden');
-                currentInfoTextEl.innerHTML = `Ready to play: <span class="font-bold text-white">${currentItem.title}</span>`;
-                albumArtDiskEl.classList.remove('disk-rotate');
-            }
-            if (isMuted || parseFloat(volumeSlider.value) === 0) {
-                volumeHighIcon.classList.add('hidden');
-                volumeMuteIcon.classList.remove('hidden');
-            } else {
-                volumeHighIcon.classList.remove('hidden');
-                volumeMuteIcon.classList.add('hidden');
-            }
-            document.querySelectorAll('.track-item').forEach((el, index) => {
-                el.classList.remove('bg-slate-800/70', 'text-emerald-400');
-                el.classList.add('hover:bg-slate-800/80', 'text-white');
-                if (index === currentTrackIndex) {
-                    el.classList.add('bg-slate-800/70', 'text-emerald-400');
-                    el.classList.remove('hover:bg-slate-800/80', 'text-white');
-                }
-            });
-            if (Tone.Transport.state !== 'started') {
-                progressBar.style.width = '0%';
-                currentTimeEl.textContent = '0:00';
-                let duration = 0;
-                if (audioPlayer && audioPlayer.buffer) duration = audioPlayer.buffer.duration;
-                totalTimeEl.textContent = formatTime(duration);
-            }
-            shuffleBtn.classList.toggle('text-emerald-400', isShuffling);
-            repeatBtn.classList.toggle('text-emerald-400', repeatMode !== 'off');
-            updateLyrics();
-            updateQueue();
-        }
-
-        function stopPlayback() {
-            Tone.Transport.pause();
-            if (audioPlayer) audioPlayer.stop();
-            clearInterval(progressInterval);
-            progressInterval = null;
-            isPlaying = false;
-            stopVisualizer();
-        }
-
-        function startPlayback() {
-            if (!audioPlayer || !audioPlayer.buffer) return;
-            Tone.Transport.start();
-            if (!progressInterval) {
-                progressInterval = setInterval(updateProgress, 1000 / 30);
-            }
-            isPlaying = true;
-            audioPlayer.start(Tone.Transport.now(), Tone.Transport.seconds);
-            startVisualizer();
-            updateUI();
-        }
-
-        async function togglePlayPause() {
-            await Tone.start();
-            initializeTone();
-            if (!audioPlayer) return;
-            if (!audioPlayer.buffer) {
-                const track = playlistItems[currentTrackIndex];
-                try { await audioPlayer.load(track.url); }
-                catch (err) { return; }
-            }
-            if (isPlaying) stopPlayback();
-            else startPlayback();
-            updateUI();
-        }
-
-        function toggleMute() {
-            initializeTone();
-            if (isMuted) {
-                isMuted = false;
-                const restoreVolume = lastVolume > 0.05 ? lastVolume : 0.5;
-                volumeSlider.value = restoreVolume;
-                if (audioPlayer) audioPlayer.volume.value = Tone.gainToDb(restoreVolume);
-            } else {
-                isMuted = true;
-                lastVolume = parseFloat(volumeSlider.value);
-                volumeSlider.value = 0;
-                if (audioPlayer) audioPlayer.volume.value = -Infinity;
-            }
-            updateUI();
-        }
-
-        function renderTracklist() {
-            tracklistContainer.innerHTML = '';
-            playlistItems.forEach((item, index) => {
-                const trackType = 'Audio';
-                const itemEl = document.createElement('div');
-                itemEl.className = 'track-item flex items-center p-3 rounded-xl cursor-pointer transition duration-150 text-white border-b border-slate-800/40 hover:bg-slate-800/80';
-                itemEl.dataset.index = index;
-                itemEl.innerHTML = `
-            <div class="w-8 mr-4 text-center text-slate-400 font-mono text-xs">${index + 1}</div>
-            <div class="flex-1 flex items-center space-x-3 min-w-0">
-                <div class="w-8 h-8 rounded-md bg-slate-800/70 flex items-center justify-center text-[11px] text-slate-300">❤</div>
-                <div class="min-w-0">
-                    <div class="text-sm font-semibold truncate">${item.title}</div>
-                    <div class="text-[11px] text-slate-400 truncate">${item.artist}</div>
-                </div>
-            </div>
-            <div class="w-16 text-right text-[11px] font-mono font-bold text-gray-400 hidden md:block">${trackType}</div>
-        `;
-                itemEl.addEventListener('click', () => selectTrack(index, true));
-                tracklistContainer.appendChild(itemEl);
-            });
-            updateTrackCount();
-            updateUI();
-        }
-
-        async function selectTrack(index, autoplay = false) {
-            stopPlayback();
-            currentTrackIndex = index;
-            const newTrack = playlistItems[index];
-            initializeTone();
-            if (!audioPlayer) return;
-            try {
-                await audioPlayer.load(newTrack.url);
-                Tone.Transport.seconds = 0;
-                if (autoplay) startPlayback();
-                else updateUI();
-            } catch (err) {
-                isPlaying = false;
-                updateUI();
-            }
-        }
-
-        function nextTrack(userTriggered = false) {
-            if (isShuffling) {
-                let nextIndex = currentTrackIndex;
-                if (playlistItems.length > 1) {
-                    while (nextIndex === currentTrackIndex) nextIndex = Math.floor(Math.random() * playlistItems.length);
-                }
-                currentTrackIndex = nextIndex;
-            } else {
-                if (currentTrackIndex === playlistItems.length - 1) {
-                    if (userTriggered || repeatMode === 'all') currentTrackIndex = 0;
-                    else { isPlaying = false; updateUI(); return; }
-                } else currentTrackIndex++;
-            }
-            selectTrack(currentTrackIndex, isPlaying || userTriggered);
-        }
-
-        function prevTrack() {
-            if (Tone.Transport.seconds > 3) {
-                Tone.Transport.seconds = 0;
-                if (audioPlayer && isPlaying) {
-                    audioPlayer.stop();
-                    audioPlayer.start(Tone.Transport.now(), 0);
-                }
-                return;
-            }
-            if (isShuffling) {
-                let prevIndex = currentTrackIndex;
-                if (playlistItems.length > 1) {
-                    while (prevIndex === currentTrackIndex) prevIndex = Math.floor(Math.random() * playlistItems.length);
-                }
-                currentTrackIndex = prevIndex;
-            } else {
-                currentTrackIndex = (currentTrackIndex - 1 + playlistItems.length) % playlistItems.length;
-            }
-            selectTrack(currentTrackIndex, isPlaying);
-        }
-
-        document.getElementById('progress-container').addEventListener('click', (e) => {
-            initializeTone();
-            if (!audioPlayer || !audioPlayer.buffer) return;
-            const duration = audioPlayer.buffer.duration;
-            const rect = e.currentTarget.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const width = rect.width;
-            const seekPercent = clickX / width;
-            Tone.start().then(() => {
-                Tone.Transport.seconds = duration * seekPercent;
-                updateProgress();
-                if (!isPlaying) {
-                    Tone.Transport.start();
-                    Tone.Transport.pause();
-                }
-            });
-            updateUI();
-        });
-
-        volumeSlider.addEventListener('input', (e) => {
-            const volumeValue = parseFloat(e.target.value);
-            const volumeDb = Tone.gainToDb(volumeValue || 0.0001);
-            if (audioPlayer) audioPlayer.volume.value = volumeDb;
-            if (volumeValue > 0) {
-                isMuted = false;
-                lastVolume = volumeValue;
-            } else isMuted = true;
-            updateUI();
-        });
-
-        playPauseBtn.addEventListener('click', togglePlayPause);
-        nextBtn.addEventListener('click', () => nextTrack(true));
-        prevBtn.addEventListener('click', prevTrack);
-        muteBtn.addEventListener('click', toggleMute);
-
-        shuffleBtn.addEventListener('click', () => {
-            isShuffling = !isShuffling;
-            updateUI();
-        });
-
-        repeatBtn.addEventListener('click', () => {
-            if (repeatMode === 'off') repeatMode = 'all';
-            else if (repeatMode === 'all') repeatMode = 'one';
-            else repeatMode = 'off';
-            updateUI();
-        });
-
-        miniPlayBtn.addEventListener('click', togglePlayPause);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeTone();
-            for (let i = 0; i < 18; i++) {
+        function setupVisualizer() {
+            const barCount = 18;
+            visualizerEl.innerHTML = '';
+            eqBars = [];
+            for (let i = 0; i < barCount; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'eq-bar';
                 visualizerEl.appendChild(bar);
                 eqBars.push(bar);
             }
-            currentTrackIndex = 0;
+        }
+
+        function startVisualizer() {
+            if (!analyser || eqBars.length === 0 || visualizerAnimationId) return;
+
+            const animate = () => {
+                if (!isPlaying || !analyser) {
+                    stopVisualizer();
+                    return;
+                }
+
+                const values = analyser.getValue();
+
+                for (let i = 0; i < eqBars.length; i++) {
+                    const v = values[i % values.length];
+
+                    const norm = Math.max(0, Math.min(1, (v + 70) / 60));
+
+                    const h = 15 + norm * 85;
+                    eqBars[i].style.height = `${h}%`;
+                }
+
+                visualizerAnimationId = requestAnimationFrame(animate);
+            };
+
+            visualizerAnimationId = requestAnimationFrame(animate);
+        }
+
+        function stopVisualizer() {
+            if (visualizerAnimationId) {
+                cancelAnimationFrame(visualizerAnimationId);
+            }
+            visualizerAnimationId = null;
+            eqBars.forEach(bar => bar.style.height = '15%');
+        }
+
+        function handleVolumeChange() {
+            let volume = parseFloat(volumeSlider.value);
+
+            if (isNaN(volume) || volume < 0) {
+                volume = 0;
+            } else if (volume > 1) {
+                volume = 1;
+            }
+
+            volumeSlider.value = volume;
+
+            if (outputNode) {
+                outputNode.gain.value = Tone.gainToDb(volume);
+            } else {
+                 console.warn("Tone.js outputNode not yet initialized.");
+                 return;
+            }
+
+            if (volume === 0) {
+                isMuted = true;
+            } else {
+                isMuted = false;
+                lastVolume = volume;
+            }
+            updateUI();
+        }
+
+        function handleMuteToggle() {
+            if (isMuted) {
+                volumeSlider.value = lastVolume > 0.05 ? lastVolume : 0.5;
+            } else {
+                lastVolume = parseFloat(volumeSlider.value);
+                volumeSlider.value = 0;
+            }
+            handleVolumeChange();
+        }
+
+        function handleShuffleToggle() {
+            isShuffling = !isShuffling;
+
+            if (isShuffling) {
+                let currentOriginalIndex = playlist[currentTrackIndex];
+                let indices = originalPlaylistItems.map((_, i) => i);
+
+                indices.splice(indices.indexOf(currentOriginalIndex), 1);
+                shuffleArray(indices);
+
+                playlist = [currentOriginalIndex, ...indices];
+                currentTrackIndex = 0;
+
+            } else {
+                let currentOriginalIndex = playlist[currentTrackIndex];
+                playlist = originalPlaylistItems.map((_, i) => i);
+                currentTrackIndex = originalPlaylistItems.findIndex(item => item === originalPlaylistItems[currentOriginalIndex]);
+            }
+
+            updateUI();
+            updateQueue();
+        }
+
+        function handleRepeatToggle() {
+            if (repeatMode === 'off') {
+                repeatMode = 'all';
+                repeatBtn.setAttribute('title', 'Repeat All (R)');
+            } else if (repeatMode === 'all') {
+                repeatMode = 'one';
+                repeatBtn.setAttribute('title', 'Repeat One (R)');
+            } else {
+                repeatMode = 'off';
+                repeatBtn.setAttribute('title', 'Repeat Off (R)');
+            }
+            updateUI();
+        }
+
+        function handleKeydown(event) {
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'BUTTON') {
+                return;
+            }
+
+            switch (event.code) {
+                case 'Space':
+                    event.preventDefault();
+                    togglePlayback();
+                    break;
+                case 'KeyM':
+                    handleMuteToggle();
+                    break;
+                case 'KeyS':
+                    handleShuffleToggle();
+                    break;
+                case 'KeyR':
+                    handleRepeatToggle();
+                    break;
+                case 'ArrowRight':
+                    if (event.shiftKey) {
+                        nextTrack();
+                    } else {
+                        const newTime = Tone.Transport.seconds + 5;
+                        Tone.Transport.seconds = Math.min(newTime, parseFloat(seekSlider.max));
+                        handleSeekChange();
+                    }
+                    break;
+                case 'ArrowLeft':
+                    if (event.shiftKey) {
+                        prevTrack();
+                    } else {
+                        const newTime = Tone.Transport.seconds - 5;
+                        Tone.Transport.seconds = Math.max(0, newTime);
+                        handleSeekChange();
+                    }
+                    break;
+                case 'ArrowUp':
+                    volumeSlider.value = Math.min(1.0, parseFloat(volumeSlider.value) + 0.1);
+                    handleVolumeChange();
+                    break;
+                case 'ArrowDown':
+                    volumeSlider.value = Math.max(0.0, parseFloat(volumeSlider.value) - 0.1);
+                    handleVolumeChange();
+                    break;
+            }
+        }
+
+
+        function renderTracklist() {
+            tracklistContainer.innerHTML = '';
+            originalPlaylistItems.forEach((track, index) => {
+                const row = document.createElement('div');
+                row.className = 'track-row flex items-center px-6 py-3 rounded-lg transition-all duration-150 cursor-pointer';
+                row.dataset.originalIndex = index + 1;
+                row.id = `track-row-${index}`;
+                row.innerHTML = `
+                    <div class="w-8 mr-4 text-slate-400 text-sm font-semibold track-index tabular-nums">${index + 1}</div>
+                    <div class="flex-1 min-w-0 flex items-center gap-3">
+                        <img src="${track.url}" onerror="this.onerror=null;this.src='https://placehold.co/40x40/15803d/ffffff?text=A';" class="w-10 h-10 rounded-md object-cover shadow-lg" alt="${track.title} album art">
+                        <div class="flex flex-col min-w-0">
+                            <h4 class="text-sm font-medium text-white truncate">${track.title}</h4>
+                            <p class="text-xs text-slate-400 truncate">${track.artist}</p>
+                        </div>
+                    </div>
+                    <div class="w-16 text-right text-slate-400 text-xs hidden md:block">
+                        <svg class="w-4 h-4 mx-auto text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 3v18l8-9z" />
+                        </svg>
+                    </div>
+                    <div class="w-12 text-right text-slate-400 text-xs tabular-nums">${formatTime(track.duration)}</div>
+                `;
+                row.addEventListener('click', () => {
+                    let playlistIndex = playlist.findIndex(originalIdx => originalIdx === index);
+                    selectTrack(playlistIndex, true);
+                });
+                tracklistContainer.appendChild(row);
+            });
+        }
+
+        function initApp() {
+            initializeTone();
+            updateTrackCount();
+            setupVisualizer();
             renderTracklist();
-            selectTrack(currentTrackIndex, false);
-        });
+
+            selectTrack(currentTrackIndex);
+            updateUI();
+
+            playPauseBtn.addEventListener('click', togglePlayback);
+            miniPlayBtn.addEventListener('click', togglePlayback);
+            nextBtn.addEventListener('click', nextTrack);
+            prevBtn.addEventListener('click', prevTrack);
+            volumeSlider.addEventListener('input', handleVolumeChange);
+            muteBtn.addEventListener('click', handleMuteToggle);
+            shuffleBtn.addEventListener('click', handleShuffleToggle);
+            repeatBtn.addEventListener('click', handleRepeatToggle);
+
+            seekSlider.addEventListener('input', handleSeekChange);
+
+            document.addEventListener('keydown', handleKeydown);
+
+
+            document.body.addEventListener('click', () => {
+                if (Tone.context.state !== 'running') {
+                    Tone.start();
+                }
+            }, { once: true });
+        }
+
+        window.onload = initApp;
+
     </script>
+</body>
+
+</html>
