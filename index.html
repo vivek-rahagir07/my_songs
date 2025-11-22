@@ -1,17 +1,16 @@
+<!-- File: neostream.html -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arijit Singh – NeoStream Player</title>
+  <title>NeoStream – Future of Music</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
 
   <style>
     :root {
@@ -27,9 +26,9 @@
     body {
       font-family: "Inter", sans-serif;
       background: radial-gradient(circle at 0 0, rgba(139, 92, 246, 0.18), transparent 55%),
-                  radial-gradient(circle at 100% 0, rgba(34, 211, 238, 0.18), transparent 55%),
-                  radial-gradient(circle at 0 100%, rgba(236, 72, 153, 0.15), transparent 55%),
-                  #020617;
+        radial-gradient(circle at 100% 0, rgba(34, 211, 238, 0.18), transparent 55%),
+        radial-gradient(circle at 0 100%, rgba(236, 72, 153, 0.15), transparent 55%),
+        #020617;
       background-size: 200% 200%;
       animation: bgShift 22s ease-in-out infinite alternate;
       min-height: 100vh;
@@ -38,8 +37,31 @@
     }
 
     @keyframes bgShift {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 100% 100%; }
+      0% {
+        background-position: 0% 0%;
+      }
+
+      100% {
+        background-position: 100% 100%;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.3);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(139, 92, 246, 0.5);
     }
 
     .bokeh-layer {
@@ -70,18 +92,26 @@
     }
 
     @keyframes floatDot {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      100% { transform: translate3d(40px, -60px, 0) scale(1.1); }
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate3d(40px, -60px, 0) scale(1.1);
+      }
     }
 
+    /* Glassmorphism */
     .glass-main {
       background: rgba(15, 23, 42, 0.88);
-      border-radius: 1.25rem;
-      border: 1px solid rgba(148, 163, 184, 0.35);
+      border: 1px solid rgba(148, 163, 184, 0.2);
       backdrop-filter: blur(22px) saturate(160%);
-      box-shadow:
-        0 24px 50px rgba(2, 6, 23, 0.95),
-        0 0 40px rgba(139, 92, 246, 0.45);
+    }
+
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      backdrop-filter: blur(12px);
     }
 
     .glass-player {
@@ -89,43 +119,40 @@
       border-radius: 1.25rem;
       border: 1px solid rgba(148, 163, 184, 0.4);
       backdrop-filter: blur(24px) saturate(170%);
-      box-shadow:
-        0 -12px 40px rgba(2, 6, 23, 1),
-        0 0 30px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 -12px 40px rgba(2, 6, 23, 1), 0 0 30px rgba(139, 92, 246, 0.3);
     }
 
-    .hero-heading {
-      animation: glowPulse 4.5s ease-in-out infinite;
-    }
+    /* Neon Text Animation */
+    @keyframes neonText {
+      0%,
+      100% {
+        text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+      }
 
-    @keyframes glowPulse {
-      0%, 100% { text-shadow: 0 0 14px rgba(139, 92, 246, 0.7); }
-      50% { text-shadow:
-          0 0 20px rgba(34, 211, 238, 0.7),
-          0 0 40px rgba(139, 92, 246, 0.6);
+      50% {
+        text-shadow: 0 0 20px rgba(34, 211, 238, 0.8);
       }
     }
 
+    .neon-text-anim {
+      animation: neonText 2s infinite alternate;
+      color: #e0e7ff;
+    }
+
+    /* Album Art Spin */
     .album-wrapper {
       position: relative;
       border-radius: 1.5rem;
       overflow: hidden;
       border: 1px solid rgba(148, 163, 184, 0.6);
-      box-shadow:
-        0 18px 40px rgba(15, 23, 42, 1),
-        0 0 35px rgba(139, 92, 246, 0.6);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 1), 0 0 35px rgba(139, 92, 246, 0.6);
     }
 
     .album-wrapper::before {
       content: "";
       position: absolute;
       inset: -40%;
-      background: conic-gradient(from 180deg,
-        rgba(139, 92, 246, 0.7),
-        rgba(34, 211, 238, 0.6),
-        rgba(15, 23, 42, 1),
-        rgba(236, 72, 153, 0.6),
-        rgba(139, 92, 246, 0.7));
+      background: conic-gradient(from 180deg, rgba(139, 92, 246, 0.7), rgba(34, 211, 238, 0.6), rgba(15, 23, 42, 1), rgba(236, 72, 153, 0.6), rgba(139, 92, 246, 0.7));
       mix-blend-mode: screen;
       opacity: 0;
       filter: blur(28px);
@@ -138,8 +165,13 @@
     }
 
     @keyframes holoSpin {
-      0% { transform: rotate(0); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .album-wrapper img {
@@ -153,52 +185,167 @@
       transform: scale(1.03);
     }
 
+    /* Playlist Rows */
     .track-row {
-      transition:
-        background 0.2s ease,
-        transform 0.16s ease,
-        box-shadow 0.18s ease,
-        border-color 0.18s ease;
+      background: rgba(30, 41, 59, 0.4);
+      border-radius: 0.75rem;
+      border: 1px solid transparent;
+      transition: 0.25s ease;
     }
 
     .track-row:hover {
-      background: rgba(15, 23, 42, 0.9);
-      transform: translateX(4px);
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
+      background: rgba(45, 55, 80, 0.7);
+      border-color: rgba(139, 92, 246, 0.4);
+      transform: translateX(6px);
     }
 
     .track-row.is-playing {
-      background: linear-gradient(90deg,
-        rgba(139, 92, 246, 0.28),
-        rgba(15, 23, 42, 0.95));
-      border-left: 3px solid var(--primary-purple);
+      border-left: 4px solid var(--primary-purple);
+      background: linear-gradient(90deg, rgba(139, 92, 246, 0.3), rgba(15, 23, 42, 0.95));
     }
 
-    #progress-bar {
-      background: linear-gradient(90deg, var(--accent-cyan), var(--primary-purple));
-      box-shadow:
-        0 0 10px rgba(34, 211, 238, 0.9),
-        0 0 18px rgba(139, 92, 246, 0.8);
-      transition: width 0.08s linear;
+    /* Cards */
+    .music-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
+    .music-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+      border-color: rgba(139, 92, 246, 0.7);
+    }
+
+    .music-card img {
+      transition: transform 0.5s ease;
+    }
+
+    .music-card:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Utilities */
     .player-btn {
-      transition: transform 0.1s ease, opacity 0.16s ease;
+      transition: 0.3s ease;
     }
 
     .player-btn:hover {
-      transform: translateY(-1px) scale(1.06);
-      opacity: 0.96;
+      transform: scale(1.1);
+      color: #fff;
+      text-shadow: 0 0 10px #8b5cf6;
     }
 
     .player-btn:active {
-      transform: translateY(1px) scale(0.94);
-      opacity: 0.88;
+      transform: scale(0.95);
     }
 
-    @media (max-width: 768px) {
-      .lyrics-col {
-        display: none;
+    .hidden {
+      display: none !important;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Extras */
+    .neon-border {
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.8), 0 0 30px rgba(34, 211, 238, 0.6), inset 0 0 15px rgba(15, 23, 42, 0.9);
+      border-color: rgba(139, 92, 246, 0.6) !important;
+    }
+
+    .neon-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .neon-hover:hover {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 1), 0 0 40px rgba(34, 211, 238, 1);
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .float {
+      animation: floatAnim 4s ease-in-out infinite;
+    }
+
+    @keyframes floatAnim {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .pulse-glow {
+      animation: pulseGlow 3s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.8);
+      }
+
+      100% {
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+      }
+    }
+
+    @keyframes slideFade {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-animated {
+      animation: slideFade 0.8s ease-out;
+    }
+
+    /* Signature scan */
+    @keyframes scan {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .animate-scan {
+      animation: scan 3.8s linear infinite;
+    }
+
+    /* Slide-in panel animation */
+    .slide-panel {
+      transform: translateX(100%);
+      animation: slideInPanel 0.25s ease-out forwards;
+    }
+
+    @keyframes slideInPanel {
+      from {
+        transform: translateX(100%);
+      }
+
+      to {
+        transform: translateX(0%);
       }
     }
   </style>
@@ -206,89 +353,316 @@
 
 <body class="text-white">
 
-  <!-- Animated Bokeh / Hologram Background -->
+  <!-- LEFT NAVIGATION BAR -->
+  <aside id="left-sidebar"
+    class="fixed inset-y-0 left-0 w-60 glass-main border-r border-slate-700/50 z-40 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+
+    <div class="p-5 border-b border-slate-700/60 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 bg-gradient-to-br from-purple-500 to-cyan-400 rounded-full flex items-center justify-center text-lg font-bold shadow-lg">
+          N
+        </div>
+        <div class="flex flex-col">
+          <span class="text-sm font-semibold tracking-wide text-white">NeoStream</span>
+          <span class="text-[10px] text-slate-400">Future of Music</span>
+        </div>
+      </div>
+      <button id="btn-close-left" class="md:hidden text-slate-400 hover:text-white text-xl leading-none">
+        ✕
+      </button>
+    </div>
+
+    <nav class="flex-1 px-4 py-4 space-y-1 text-sm">
+      <button onclick="switchView('home')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-800/70 text-white font-medium neon-hover">
+        <span>🏠</span>
+        <span>Home</span>
+      </button>
+      <button onclick="openPage('page-search')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-800/70 text-slate-300 hover:text-white">
+        <span>🔍</span>
+        <span>Search</span>
+      </button>
+      <button onclick="openPage('page-library')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-800/70 text-slate-300 hover:text-white">
+        <span>🎵</span>
+        <span>Your Library</span>
+      </button>
+      <button onclick="openPage('page-create')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-800/70 text-slate-300 hover:text-white">
+        <span>➕</span>
+        <span>Create Playlist</span>
+      </button>
+      <button onclick="openPage('page-liked')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-800/70 text-slate-300 hover:text-white">
+        <span>❤️</span>
+        <span>Liked Songs</span>
+      </button>
+      <button onclick="openPage('page-artists')"
+        class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-800/70 text-slate-300 hover:text-white">
+        <span>👨‍🎤</span>
+        <span>Your Artists</span>
+      </button>
+    </nav>
+
+    <div class="p-4 border-t border-slate-700/60">
+      <div class="flex items-center gap-3 px-2 py-2 rounded-lg bg-slate-800/60">
+        <div class="w-8 h-8 rounded-full overflow-hidden border border-slate-500">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
+        </div>
+        <div class="flex flex-col">
+          <span class="text-xs font-bold text-white">Felix</span>
+          <span class="text-[10px] text-slate-400">Free Plan</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT NAVIGATION BAR -->
+  <aside id="right-sidebar"
+    class="fixed inset-y-0 right-0 w-64 glass-main border-l border-slate-700/50 shadow-2xl z-40 flex flex-col transform translate-x-full md:translate-x-0 transition-transform duration-300">
+    <div class="flex items-center justify-between px-5 pt-4 pb-3 border-b border-slate-700/60">
+      <h2 class="text-xs font-bold uppercase tracking-[0.18em] text-cyan-400 flex items-center gap-2">
+        ⚙️ Profile Menu
+      </h2>
+      <button id="btn-close-right" class="md:hidden text-slate-400 hover:text-white text-xl leading-none">
+        ✕
+      </button>
+    </div>
+
+    <!-- Profile / Settings / Theme / Logout -->
+    <div class="px-4 pt-4 pb-2 space-y-2 text-sm border-b border-slate-700/60">
+      <button onclick="openPanel('panel-profile')"
+        class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800/80 text-slate-200">
+        <span class="flex items-center gap-2">
+          <span>👤</span> <span>Profile</span>
+        </span>
+        <span class="text-[10px] text-slate-400">View</span>
+      </button>
+      <button onclick="openPanel('panel-settings')"
+        class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800/80 text-slate-200">
+        <span class="flex items-center gap-2">
+          <span>⚙️</span> <span>Settings</span>
+        </span>
+        <span class="text-[10px] text-slate-400">Configure</span>
+      </button>
+      <button onclick="openPanel('panel-theme')"
+        class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800/80 text-slate-200">
+        <span class="flex items-center gap-2">
+          <span>🌙</span> <span>Theme Mode</span>
+        </span>
+        <span class="text-[10px] text-slate-400">Soon</span>
+      </button>
+      <button onclick="openPanel('panel-logout')"
+        class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-red-500/70 text-slate-200">
+        <span class="flex items-center gap-2">
+          <span>🔒</span> <span>Logout</span>
+        </span>
+        <span class="text-[10px] text-slate-400">Safe Exit</span>
+      </button>
+    </div>
+
+    <!-- Favorites -->
+    <div class="p-4 border-b border-slate-700/60">
+      <h2 class="text-xs font-bold uppercase tracking-[0.18em] text-purple-400 flex items-center gap-2 mb-2">
+        <span>❤️</span> Favorites
+      </h2>
+      <div id="fav-list" class="max-h-40 overflow-y-auto space-y-2 text-sm text-slate-200 custom-scrollbar"></div>
+    </div>
+
+    <!-- Recently Played -->
+    <div class="p-4">
+      <h2 class="text-xs font-bold uppercase tracking-[0.18em] text-cyan-400 flex items-center gap-2">
+        <span>🕒</span> Recently Played
+      </h2>
+      <div id="recent-list" class="mt-3 space-y-2 text-[11px] text-slate-400 max-h-40 overflow-y-auto"></div>
+    </div>
+  </aside>
+
+  <!-- Background blobs -->
   <div class="bokeh-layer">
     <div class="bokeh-dot" style="width: 320px; height: 320px; background:#8b5cf6; left:-80px; top:60px;"></div>
     <div class="bokeh-dot" style="width: 280px; height: 280px; background:#22d3ee; right:-50px; top:220px;"></div>
     <div class="bokeh-dot" style="width: 260px; height: 260px; background:#ec4899; left:40%; top:420px;"></div>
   </div>
 
-  <!-- Audio element -->
   <audio id="audio-player"></audio>
 
-  <div class="min-h-screen flex flex-col items-center px-3 sm:px-4 py-4 gap-5">
+  <!-- Global Mini Player -->
+  <div id="global-mini-player"
+    class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-700/70 backdrop-blur-xl shadow-2xl hidden z-50">
+    <div class="max-w-6xl mx-auto flex items-center justify-between p-3 px-4 gap-3">
+      <div class="flex items-center gap-3 min-w-0 cursor-pointer" onclick="switchView('player')">
+        <div class="w-10 h-10 rounded-md bg-slate-800 overflow-hidden border border-slate-600">
+          <img id="g-mini-cover" class="w-full h-full object-cover" alt="cover" />
+        </div>
+        <div class="min-w-0">
+          <p class="text-[10px] uppercase text-slate-400">Now Playing</p>
+          <p id="g-mini-title" class="text-sm font-semibold truncate text-white">Select a track</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 text-xl">
+        <button onclick="prevTrack()" class="hover:text-purple-400">⏮</button>
+        <button id="g-mini-play" onclick="togglePlayFromMini()" class="text-3xl hover:text-purple-400">⏯</button>
+        <button onclick="nextTrack()" class="hover:text-purple-400">⏭</button>
+      </div>
+      <button onclick="closeMiniPlayer()" class="text-lg text-slate-400 hover:text-red-400">✕</button>
+    </div>
+  </div>
 
-    <!-- MAIN GLASS CONTAINER -->
-    <div class="w-full max-w-6xl glass-main p-5 sm:p-7 flex flex-col gap-6">
+  <!-- HOME VIEW -->
+  <div id="view-home"
+    class="min-h-screen flex flex-col px-4 sm:px-6 py-6 md:py-8 md:ml-60 md:mr-64 transition-opacity duration-300">
 
-      <!-- HERO SECTION -->
+    <header class="flex justify-between items-center mb-8">
+      <div class="flex items-center gap-3">
+        <!-- Left sidebar toggle (mobile) -->
+        <button id="btn-open-left"
+          class="md:hidden w-9 h-9 flex items-center justify-center rounded-full bg-slate-900/80 border border-slate-700 text-xl">
+          ☰
+        </button>
+        <div
+          class="md:hidden w-8 h-8 bg-gradient-to-br from-purple-500 to-cyan-400 rounded-full flex items-center justify-center font-bold">
+          N
+        </div>
+        <h1 class="text-xl sm:text-2xl font-bold tracking-wide">Good Morning, Felix</h1>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <input type="text" placeholder="Search artists..."
+            class="bg-slate-800/50 border border-slate-600 rounded-full px-4 py-1.5 text-sm text-white focus:border-purple-500 outline-none w-36 sm:w-64 transition-all" />
+        </div>
+        <!-- Right sidebar toggle -->
+        <button id="btn-open-right"
+          class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-900/80 border border-slate-700 text-lg hover:bg-slate-800">
+          ⚙️
+        </button>
+      </div>
+    </header>
+
+    <div id="hero-banner"
+      class="relative w-full h-64 sm:h-80 rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-2xl shadow-purple-900/40 neon-border neon-hover"
+      onclick="openHeroArtist()">
+      <img id="hero-image" src="" alt="Hero"
+        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 transform scale-100 group-hover:scale-105"
+        onerror="this.src='https://images.unsplash.com/photo-1514525253440-b393452e3728?w=1200&h=600&fit=crop'" />
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+
+      <div class="absolute bottom-0 left-0 p-6 sm:p-10 flex flex-col gap-2 items-start z-10">
+        <span id="hero-tag"
+          class="px-3 py-1 rounded-full bg-purple-600/80 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider transition-opacity duration-500">
+          Featured Artist
+        </span>
+        <h2 id="hero-title"
+          class="text-3xl sm:text-5xl font-bold hero-heading transition-all duration-500 hero-animated">
+        </h2>
+        <p id="hero-desc" class="text-slate-300 text-sm sm:text-base max-w-lg transition-all duration-500 hero-animated">
+        </p>
+      </div>
+      <div id="hero-indicators" class="absolute bottom-6 right-6 flex gap-2 z-20"></div>
+    </div>
+
+    <section>
+      <div class="flex flex-col gap-4 mb-6">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-bold text-white">Top Artists</h3>
+          <span class="text-xs text-slate-400 cursor-pointer hover:text-purple-400"
+            onclick="openPage('page-artists')">View All</span>
+        </div>
+        <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+          <button onclick="filterArtists('all')"
+            class="filter-btn px-4 py-1.5 rounded-full bg-purple-600 text-xs font-medium text-white whitespace-nowrap hover:bg-purple-500 transition"
+            data-filter="all">All</button>
+          <button onclick="filterArtists('Bollywood')"
+            class="filter-btn px-4 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs font-medium text-slate-300 whitespace-nowrap hover:border-purple-400 hover:text-white transition"
+            data-filter="Bollywood">Bollywood</button>
+          <button onclick="filterArtists('Pop')"
+            class="filter-btn px-4 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs font-medium text-slate-300 whitespace-nowrap hover:border-purple-400 hover:text-white transition"
+            data-filter="Pop">Pop</button>
+          <button onclick="filterArtists('Punjabi')"
+            class="filter-btn px-4 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs font-medium text-slate-300 whitespace-nowrap hover:border-purple-400 hover:text-white transition"
+            data-filter="Punjabi">Punjabi</button>
+          <button onclick="filterArtists('Indie')"
+            class="filter-btn px-4 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs font-medium text-slate-300 whitespace-nowrap hover:border-purple-400 hover:text-white transition"
+            data-filter="Indie">Indie</button>
+        </div>
+      </div>
+
+      <div id="artists-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      </div>
+    </section>
+
+    <footer class="mt-12 text-center text-slate-500 text-xs py-6">NeoStream Music App © 2025</footer>
+  </div>
+
+  <!-- PLAYER VIEW -->
+  <div id="view-player"
+    class="hidden min-h-screen flex-col items-center px-3 sm:px-4 py-4 gap-5 md:ml-60 md:mr-64 transition-opacity duration-300">
+
+    <div class="w-full flex items-center gap-2 mb-2">
+      <button onclick="switchView('home')"
+        class="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80 border border-slate-700 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition glass-panel neon-hover">
+        ← Back to Home
+      </button>
+    </div>
+
+    <div class="w-full glass-main neon-border p-5 sm:p-7 flex flex-col gap-6">
       <section class="flex flex-col items-center text-center gap-5">
         <div class="flex flex-col items-center gap-2">
-          <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">NeoStream · Arijit Special</p>
-          <h1
-            class="hero-heading text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 via-cyan-300 to-purple-500 bg-clip-text text-transparent">
-            Arijit Singh – Essentials
+          <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400">NeoStream · <span
+              id="playlist-category">Special</span></p>
+          <h1 id="playlist-title"
+            class="hero-heading text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 via-cyan-300 to-purple-500 bg-clip-text text-transparent hero-animated">
+            Artist Name
           </h1>
-          <p class="mt-1 text-xs sm:text-sm text-slate-300 max-w-xl">
-            A neon-futuristic playlist of Arijit’s most iconic hits. Best with headphones at 2AM.
+          <p id="playlist-desc" class="mt-1 text-xs sm:text-sm text-slate-300 max-w-xl">Artist description goes here.
           </p>
         </div>
 
-        <!-- Album + Info -->
         <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 mt-2 w-full">
           <div class="flex justify-center w-full sm:w-auto">
-            <div id="album-wrapper"
-                 class="album-wrapper w-32 h-32 sm:w-40 sm:h-40 bg-slate-950 overflow-hidden">
-              <img id="album-photo"
-                   src="photo/arijit.png"
-                   onerror="this.src='https://placehold.co/300x300/020617/ffffff?text=Image';"
-                   class="w-full h-full object-cover">
+            <div id="album-wrapper" class="album-wrapper w-32 h-32 sm:w-40 sm:h-40 bg-slate-950 overflow-hidden float">
+              <img id="album-photo" src="" alt="Album"
+                onerror="this.src='https://placehold.co/300x300/020617/ffffff?text=Music';"
+                class="w-full h-full object-cover" />
             </div>
           </div>
           <div class="flex-1 flex flex-col items-center sm:items-start gap-3">
             <p id="current-info-text" class="text-xs sm:text-sm text-slate-300">
-              Ready to play:
-              <span id="current-title" class="font-semibold text-slate-100">Select a track</span>
+              Ready to play: <span id="current-title" class="font-semibold text-slate-100">Select a track</span>
             </p>
-
-            <!-- Search bar -->
             <div class="w-full max-w-xs">
               <div
                 class="flex items-center gap-2 px-3 py-2 rounded-full bg-slate-950/80 border border-slate-700/80 text-xs sm:text-sm shadow-lg">
                 <span>🔍</span>
                 <input id="search-input" type="text" placeholder="Search songs..."
-                       class="bg-transparent outline-none w-full placeholder:text-slate-500">
+                  class="bg-transparent outline-none w-full placeholder:text-slate-500 text-white" />
               </div>
             </div>
-
-            <p class="text-[11px] text-slate-500 mt-1 hidden sm:block">
-              Tip: Press <span class="text-purple-300">Space</span> to Play / Pause, <span class="text-purple-300">← / →</span> to seek.
-            </p>
           </div>
         </div>
       </section>
 
-      <!-- Divider + heading above playlist -->
       <div class="flex items-center justify-between mt-2">
-        <h2 class="text-base sm:text-lg font-semibold text-slate-100">Playlist · Arijit Neo Nights</h2>
-        <span class="text-[11px] text-slate-400">20 tracks · Auto-next enabled</span>
+        <h2 class="text-base sm:text-lg font-semibold text-slate-100">Playlist · Tracks</h2>
+        <span id="track-count" class="text-[11px] text-slate-400">0 tracks · Auto-next enabled</span>
       </div>
       <div class="w-full h-px bg-slate-700/60"></div>
 
-      <!-- MAIN CONTENT: TRACKLIST + LYRICS -->
       <section class="flex flex-col md:flex-row gap-4 flex-1 min-h-0">
-        <!-- TRACKLIST -->
-        <div class="flex-1 rounded-2xl bg-slate-950/70 border border-slate-800/80 p-3 sm:p-4 overflow-y-auto max-h-[52vh]">
+        <div
+          class="flex-1 rounded-2xl bg-slate-950/70 border border-slate-800/80 p-3 sm:p-4 overflow-y-auto max-h-[52vh]">
           <div id="tracklist" class="space-y-1"></div>
         </div>
 
-        <!-- LYRICS / QUEUE -->
         <aside
           class="lyrics-col hidden md:flex w-full md:w-1/3 rounded-2xl bg-slate-950/80 border border-slate-800/80 p-4 flex-col gap-3">
           <div>
             <h3 class="text-[11px] font-semibold uppercase tracking-wide text-slate-300">Lyrics</h3>
             <pre id="lyrics-content"
-                 class="whitespace-pre-wrap text-xs leading-relaxed text-slate-200 bg-slate-900/70 rounded-xl p-3 mt-2 min-h-[120px]"></pre>
+              class="whitespace-pre-wrap text-xs leading-relaxed text-slate-200 bg-slate-900/70 rounded-xl p-3 mt-2 min-h-[120px] font-sans"></pre>
           </div>
           <div class="mt-1">
             <h3 class="text-[11px] font-semibold uppercase tracking-wide text-slate-300">Up Next</h3>
@@ -298,17 +672,13 @@
       </section>
     </div>
 
-    <!-- PLAYER BAR -->
-    <footer class="w-full max-w-6xl glass-player p-3 sm:p-4 flex flex-col gap-2 sticky bottom-2">
-
+    <footer class="w-full glass-player neon-border p-3 sm:p-4 flex flex-col gap-2 sticky bottom-4 z-30 mt-4">
       <div class="flex items-center justify-between gap-3">
-
-        <!-- LEFT: mini track info -->
         <div class="flex items-center gap-3 w-2/5 min-w-[30%]">
           <div class="hidden sm:block w-10 h-10 rounded-lg overflow-hidden bg-slate-900 border border-slate-700">
-            <img id="mini-cover" src="photo/arijit.png"
-                 onerror="this.src='https://placehold.co/80x80/020617/ffffff?text=Image';"
-                 class="w-full h-full object-cover">
+            <img id="mini-cover" src="" alt="cover-mini"
+              onerror="this.src='https://placehold.co/80x80/020617/ffffff?text=Music';"
+              class="w-full h-full object-cover" />
           </div>
           <div class="min-w-0">
             <p class="text-[11px] uppercase tracking-wide text-slate-400">Now Playing</p>
@@ -316,237 +686,782 @@
           </div>
         </div>
 
-        <!-- CENTER: controls + seek -->
         <div class="flex flex-col items-center w-3/5 sm:w-2/5">
           <div class="flex items-center gap-3 mb-1">
-            <button id="prev-btn" class="player-btn text-lg sm:text-xl" title="Previous">
-              ⏮
+            <button id="prev-btn" class="player-btn text-lg sm:text-xl" title="Previous">⏮</button>
+            <button id="play-pause-btn" class="player-btn text-2xl sm:text-3xl pulse-glow" title="Play / Pause">⏯
             </button>
-            <button id="play-pause-btn" class="player-btn text-2xl sm:text-3xl" title="Play / Pause">
-              ⏯
-            </button>
-            <button id="next-btn" class="player-btn text-lg sm:text-xl" title="Next">
-              ⏭
-            </button>
+            <button id="next-btn" class="player-btn text-lg sm:text-xl" title="Next">⏭</button>
           </div>
           <div class="flex items-center gap-2 w-full text-[10px] sm:text-[11px]">
             <span id="current-time" class="w-8 text-right">0:00</span>
-            <div class="w-full relative h-3">
+            <div class="w-full relative h-3 flex items-center">
               <input type="range" id="seek-slider" value="0" step="0.1"
-                     class="absolute inset-0 opacity-0 cursor-pointer">
-              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                <div id="progress-bar" class="h-1.5 w-0 rounded-full"></div>
+                class="absolute inset-0 w-full opacity-0 cursor-pointer z-10" />
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
+                <div id="progress-bar" class="h-full w-0 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500">
+                </div>
               </div>
             </div>
             <span id="total-time" class="w-8 text-left">0:00</span>
           </div>
         </div>
 
-        <!-- RIGHT: volume -->
         <div class="hidden sm:flex items-center gap-2 w-1/5 justify-end text-[11px]">
-          <span id="mute-icon" class="cursor-pointer">🔊</span>
+          <span id="mute-icon" class="cursor-pointer text-lg">🔊</span>
           <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5"
-                 class="w-24 accent-purple-400">
+            class="w-24 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-400" />
         </div>
       </div>
-
     </footer>
-
   </div>
 
-  <!-- JAVASCRIPT ENGINE -->
+  <!-- ========= FULLSCREEN PAGES (LEFT NAV) ========= -->
+
+  <!-- SEARCH PAGE -->
+  <div id="page-search"
+    class="app-page hidden fixed inset-0 bg-slate-950/95 md:ml-60 md:mr-64 overflow-y-auto z-40 p-6">
+    <button onclick="closePage('page-search')"
+      class="px-4 py-2 mb-6 rounded-full bg-slate-800 border border-slate-600 hover:bg-slate-700">
+      ← Back
+    </button>
+    <h1 class="text-3xl font-bold mb-6">Search</h1>
+    <div class="mb-6">
+      <input type="text" placeholder="Search songs, artists..."
+        class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white focus:border-purple-500">
+    </div>
+    <p class="text-slate-400">Search results will appear here soon…</p>
+  </div>
+
+  <!-- LIKED SONGS PAGE -->
+  <div id="page-liked"
+    class="app-page hidden fixed inset-0 bg-slate-950/95 md:ml-60 md:mr-64 overflow-y-auto z-40 p-6">
+    <button onclick="closePage('page-liked')"
+      class="px-4 py-2 mb-6 rounded-full bg-slate-800 border border-slate-600 hover:bg-slate-700">
+      ← Back
+    </button>
+    <h1 class="text-3xl font-bold mb-6">Liked Songs</h1>
+    <div id="liked-list" class="space-y-3 text-slate-200 text-sm">
+      <p class="text-slate-500">♥ Songs you like will appear here.</p>
+    </div>
+  </div>
+
+  <!-- LIBRARY PAGE -->
+  <div id="page-library"
+    class="app-page hidden fixed inset-0 bg-slate-950/95 md:ml-60 md:mr-64 overflow-y-auto z-40 p-6">
+    <button onclick="closePage('page-library')"
+      class="px-4 py-2 mb-6 rounded-full bg-slate-800 border border-slate-600 hover:bg-slate-700">
+      ← Back
+    </button>
+    <h1 class="text-3xl font-bold mb-4">Your Library</h1>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">Favorites</h3>
+    <div id="library-fav" class="space-y-2 text-slate-300"></div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">Recently Played</h3>
+    <div id="library-recent" class="space-y-2 text-slate-300"></div>
+  </div>
+
+  <!-- ARTISTS PAGE -->
+  <div id="page-artists"
+    class="app-page hidden fixed inset-0 bg-slate-950/95 md:ml-60 md:mr-64 overflow-y-auto z-40 p-6">
+    <button onclick="closePage('page-artists')"
+      class="px-4 py-2 mb-6 rounded-full bg-slate-800 border border-slate-600 hover:bg-slate-700">
+      ← Back
+    </button>
+    <h1 class="text-3xl font-bold mb-6">All Artists</h1>
+    <div id="artists-page-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+  </div>
+
+  <!-- CREATE PLAYLIST PAGE -->
+  <div id="page-create"
+    class="app-page hidden fixed inset-0 bg-slate-950/95 md:ml-60 md:mr-64 overflow-y-auto z-40 p-6">
+    <button onclick="closePage('page-create')"
+      class="px-4 py-2 mb-6 rounded-full bg-slate-800 border border-slate-600 hover:bg-slate-700">
+      ← Back
+    </button>
+    <h1 class="text-3xl font-bold mb-4">Create Playlist</h1>
+    <input id="playlist-name"
+      class="w-full px-4 py-3 mb-4 rounded-xl bg-slate-800 border border-slate-600 text-white"
+      placeholder="Playlist Name">
+    <textarea id="playlist-desc"
+      class="w-full px-4 py-3 h-32 rounded-xl bg-slate-800 border border-slate-600 text-white"
+      placeholder="Playlist Description"></textarea>
+    <button
+      class="mt-4 px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-full">
+      Save Playlist (UI only)
+    </button>
+  </div>
+
+  <!-- ========= SLIDE-IN PANELS (RIGHT NAV) ========= -->
+
+  <!-- PROFILE PANEL -->
+  <div id="panel-profile"
+    class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
+    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+      <button onclick="closePanel('panel-profile')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
+      <h1 class="text-2xl font-bold mb-4">Profile</h1>
+      <div class="flex items-center gap-4 mb-6">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+          class="w-16 h-16 rounded-full border border-slate-700">
+        <div>
+          <p class="text-lg font-semibold">Felix</p>
+          <p class="text-slate-500 text-sm">Free Plan</p>
+        </div>
+      </div>
+      <p class="text-slate-400 text-sm">
+        Your profile settings and history will appear here soon.
+      </p>
+    </div>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div id="panel-settings"
+    class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
+    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+      <button onclick="closePanel('panel-settings')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
+      <h1 class="text-2xl font-bold mb-4">Settings</h1>
+      <div class="space-y-4 text-sm text-slate-300">
+        <div class="flex items-center justify-between">
+          <span>Notifications</span>
+          <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-xs">Coming soon</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span>Playback Quality</span>
+          <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-xs">Auto</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEME PANEL -->
+  <div id="panel-theme"
+    class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
+    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+      <button onclick="closePanel('panel-theme')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
+      <h1 class="text-2xl font-bold mb-4">Theme Mode</h1>
+      <button onclick="toggleThemeReal()"
+        class="w-full px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold">
+        Toggle Dark / Light Mode
+      </button>
+      <p class="text-slate-500 text-sm mt-4">
+        More theme options coming soon…
+      </p>
+    </div>
+  </div>
+
+  <!-- LOGOUT PANEL -->
+  <div id="panel-logout"
+    class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
+    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+      <button onclick="closePanel('panel-logout')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
+      <h1 class="text-2xl font-bold text-red-400 mb-4">Logout?</h1>
+      <p class="text-slate-400 text-sm mb-6">
+        Are you sure you want to log out?
+      </p>
+      <button onclick="confirmLogout()"
+        class="w-full px-4 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold">
+        Yes, Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- =================== SCRIPT =================== -->
   <script>
-    /* -------- PLAYLIST DATA -------- */
-    const playlist = [
-      { title: "Tum Hi Ho (Aashiqui 2)", artist: "Arijit Singh", url: "songs/track1.mp3" },
-      { title: "Kesariya (Brahmāstra)", artist: "Arijit Singh", url: "songs/track2.mp3" },
-      { title: "Channa Mereya (Ae Dil Hai Mushkil)", artist: "Arijit Singh", url: "songs/track3.mp3" },
-      { title: "Jhoome Jo Pathaan (Pathaan)", artist: "Arijit Singh", url: "songs/track4.mp3" },
-      { title: "Phir Mohabbat (Murder 2)", artist: "Arijit Singh", url: "songs/track5.mp3" },
-      { title: "Pachtaoge (Jaani Ve)", artist: "Arijit Singh", url: "songs/track6.mp3" },
-      { title: "Hawayein (Jab Harry Met Sejal)", artist: "Arijit Singh", url: "songs/track7.mp3" },
-      { title: "Hamari Adhuri Kahani", artist: "Arijit Singh", url: "songs/track8.mp3" },
-      { title: "Tera Yaar Hoon Main", artist: "Arijit Singh", url: "songs/track9.mp3" },
-      { title: "Zaalima", artist: "Arijit Singh", url: "songs/track10.mp3" },
-      { title: "Ae Dil Hai Mushkil (Title Track)", artist: "Arijit Singh", url: "songs/track11.mp3" },
-      { title: "Gerua (Reprise)", artist: "Arijit Singh", url: "songs/track12.mp3" },
-      { title: "Raabta (Night in the Motel)", artist: "Arijit Singh", url: "songs/track13.mp3" },
-      { title: "Khairiyat (Chhichhore)", artist: "Arijit Singh", url: "songs/track14.mp3" },
-      { title: "Shayad (Love Aaj Kal)", artist: "Arijit Singh", url: "songs/track15.mp3" },
-      { title: "Soch Na Sake (Reprise)", artist: "Arijit Singh", url: "songs/track16.mp3" },
-      { title: "Naina (Dangal)", artist: "Arijit Singh", url: "songs/track17.mp3" },
-      { title: "Samjhawan (Unplugged)", artist: "Arijit Singh", url: "songs/track18.mp3" },
-      { title: "Janam Janam (Dilwale)", artist: "Arijit Singh", url: "songs/track19.mp3" },
-      { title: "Rait Zara Si (Atrangi Re)", artist: "Arijit Singh", url: "songs/track20.mp3" }
+    /* -------- GLOBAL DATA STORE -------- */
+    var SAMPLE_MP3 = "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3";
+
+    var artistsData = {
+      'arijit': {
+        name: "Arijit Singh",
+        category: "Bollywood",
+        desc: "The soulful voice of a generation.",
+        heroImage: "photo/arijitslide.jpeg",
+        gridImage: "photo/arijitgrid.jpeg",
+        playerImage: "photo/arijit.png",
+        tracks: [
+          { title: "Tum Hi Ho (Aashiqui 2)", artist: "Arijit Singh", url: "songs/track1.mp3" },
+          { title: "Kesariya (Brahmāstra)", artist: "Arijit Singh", url: "songs/track2.mp3" },
+          { title: "Channa Mereya (Ae Dil Hai Mushkil)", artist: "Arijit Singh", url: "songs/track3.mp3" },
+          { title: "Jhoome Jo Pathaan (Pathaan)", artist: "Arijit Singh", url: "songs/track4.mp3" },
+          { title: "Phir Mohabbat (Murder 2)", artist: "Arijit Singh", url: "songs/track5.mp3" },
+          { title: "Pachtaoge (Jaani Ve)", artist: "Arijit Singh", url: "songs/track6.mp3" },
+          { title: "Hawayein (Jab Harry Met Sejal)", artist: "Arijit Singh", url: "songs/track7.mp3" },
+          { title: "Hamari Adhuri Kahani", artist: "Arijit Singh", url: "songs/track8.mp3" },
+          { title: "Tera Yaar Hoon Main", artist: "Arijit Singh", url: "songs/track9.mp3" },
+          { title: "Zaalima", artist: "Arijit Singh", url: "songs/track10.mp3" },
+          { title: "Ae Dil Hai Mushkil (Title Track)", artist: "Arijit Singh", url: "songs/track11.mp3" },
+          { title: "Gerua (Reprise)", artist: "Arijit Singh", url: "songs/track12.mp3" },
+          { title: "Raabta (Night in the Motel)", artist: "Arijit Singh", url: "songs/track13.mp3" },
+          { title: "Khairiyat (Chhichhore)", artist: "Arijit Singh", url: "songs/track14.mp3" },
+          { title: "Shayad (Love Aaj Kal)", artist: "Arijit Singh", url: "songs/track15.mp3" },
+          { title: "Soch Na Sake (Reprise)", artist: "Arijit Singh", url: "songs/track16.mp3" },
+          { title: "Naina (Dangal)", artist: "Arijit Singh", url: "songs/track17.mp3" },
+          { title: "Samjhawan (Unplugged)", artist: "Arijit Singh", url: "songs/track18.mp3" },
+          { title: "Janam Janam (Dilwale)", artist: "Arijit Singh", url: "songs/track19.mp3" },
+          { title: "Rait Zara Si (Atrangi Re)", artist: "Arijit Singh", url: "songs/track20.mp3" }
+        ]
+      },
+      'shreya': {
+        name: "Shreya Ghoshal",
+        category: "Bollywood",
+        desc: "Melody Queen of Bollywood.",
+        heroImage: "photo/shreyaslide.jpg",
+        gridImage: "photo/shreyagrid.jpg",
+        playerImage: "photo/shreyagoshal.png",
+        tracks: [
+          { title: "Aa gale lag ja duet", artist: "Shreya Ghoshal", url: "songs/track21.mp3" },
+          { title: "Aa pass Aa", artist: "Shreya Ghoshal", url: "songs/track22.mp3" },
+          { title: "Deewani Mastani", artist: "Shreya Ghoshal", url: "songs/track23.mp3" }
+        ]
+      },
+      'weeknd': {
+        name: "The Weeknd",
+        category: "Pop",
+        desc: "Synth-pop vibes for late night drives.",
+        heroImage: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=1200&h=600&fit=crop",
+        gridImage: "photo/diljitgrid.jpg",
+        playerImage: "https://images.unsplash.com/photo-1571330735066-03aaa5501e3e?w=600&h=600&fit=crop",
+        tracks: [
+          { title: "Blinding Lights", artist: "The Weeknd", url: SAMPLE_MP3 },
+          { title: "Starboy", artist: "The Weeknd", url: SAMPLE_MP3 },
+          { title: "Save Your Tears", artist: "The Weeknd", url: SAMPLE_MP3 },
+          { title: "The Hills", artist: "The Weeknd", url: SAMPLE_MP3 },
+          { title: "Die For You", artist: "The Weeknd", url: SAMPLE_MP3 }
+        ]
+      },
+      'diljit': {
+        name: "Diljit Dosanjh",
+        category: "Punjabi",
+        desc: "G.O.A.T vibes only.",
+        heroImage: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1200&h=600&fit=crop",
+        gridImage: "photo/diljitgrid.jpg",
+        playerImage: "photo/preview.png",
+        tracks: [
+          { title: "Lover", artist: "Diljit Dosanjh", url: SAMPLE_MP3 },
+          { title: "G.O.A.T.", artist: "Diljit Dosanjh", url: SAMPLE_MP3 },
+          { title: "Vibe", artist: "Diljit Dosanjh", url: SAMPLE_MP3 },
+          { title: "Lemonade", artist: "Diljit Dosanjh", url: SAMPLE_MP3 },
+          { title: "Peaches", artist: "Diljit Dosanjh", url: SAMPLE_MP3 }
+        ]
+      },
+      'prateek': {
+        name: "Prateek Kuhad",
+        category: "Indie",
+        desc: "Soft acoustic melodies for the heart.",
+        heroImage: "https://images.unsplash.com/photo-1465847899078-b413929f7120?w=1200&h=600&fit=crop",
+        gridImage: "photo/prateek.jpg",
+        playerImage: "photo/kudan.png",
+        tracks: [
+          { title: "cold/mess", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
+          { title: "Kasoor", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
+          { title: "Tum Jab Paas", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
+          { title: "100 Words", artist: "Prateek Kuhad", url: SAMPLE_MP3 }
+        ]
+      },
+      'lofi': {
+        name: "Midnight Lo-Fi",
+        category: "Pop",
+        desc: "Chill beats to code/sleep to.",
+        heroImage: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=1200&h=600&fit=crop",
+        gridImage: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&h=600&fit=crop",
+        playerImage: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=600&h=600&fit=crop",
+        tracks: [
+          { title: "Night Coffee", artist: "Lo-Fi Girl", url: SAMPLE_MP3 },
+          { title: "Coding Dreams", artist: "Chill Hop", url: SAMPLE_MP3 },
+          { title: "Rainy Window", artist: "Lofi Beats", url: SAMPLE_MP3 }
+        ]
+      }
+    };
+
+    /* -------- SLIDESHOW CONFIG -------- */
+    var heroSlides = [
+      {
+        key: 'arijit',
+        title: "👑 Arijit Singh Special",
+        desc: "The King of Playback Singing. Soulful & Live.",
+        image: artistsData['arijit'].heroImage,
+        tag: "Featured Artist"
+      },
+      {
+        key: 'shreya',
+        title: "Shreya Ghoshal Melodies",
+        desc: "Pure vocals in high fidelity.",
+        image: artistsData['shreya'].heroImage,
+        tag: "Trending Now"
+      },
+      {
+        key: 'weeknd',
+        title: "The Weeknd Vibes",
+        desc: "Synth-pop rhythms and city lights.",
+        image: artistsData['weeknd'].heroImage,
+        tag: "Global Hit"
+      },
+      {
+        key: 'diljit',
+        title: "Diljit's Punjabi Beats",
+        desc: "High energy stage performances.",
+        image: artistsData['diljit'].heroImage,
+        tag: "Party Starter"
+      }
     ];
 
-    const lyricsData = playlist.map(t => ({
-      title: t.title,
-      text: `🎵 Placeholder Lyrics 🎵\n\n${t.title}\nby ${t.artist}\n\nAdd the full lyrics here if you want.`
-    }));
+    var currentSlide = 0;
+    var slideInterval;
 
-    /* -------- DOM ELEMENTS -------- */
-    const audio = document.getElementById("audio-player");
-    const playPauseBtn = document.getElementById("play-pause-btn");
-    const prevBtn = document.getElementById("prev-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const volumeSlider = document.getElementById("volume-slider");
-    const seekSlider = document.getElementById("seek-slider");
-    const progressBar = document.getElementById("progress-bar");
-    const currentTimeEl = document.getElementById("current-time");
-    const totalTimeEl = document.getElementById("total-time");
-    const playerTitleEl = document.getElementById("player-title");
-    const tracklistContainer = document.getElementById("tracklist");
-    const lyricsContentEl = document.getElementById("lyrics-content");
-    const queueListEl = document.getElementById("queue-list");
-    const currentTitleEl = document.getElementById("current-title");
-    const currentInfoTextEl = document.getElementById("current-info-text");
-    const albumWrapper = document.getElementById("album-wrapper");
-    const albumPhoto = document.getElementById("album-photo");
-    const miniCover = document.getElementById("mini-cover");
-    const searchInput = document.getElementById("search-input");
-    const muteIcon = document.getElementById("mute-icon");
+    /* -------- APP STATE -------- */
+    var currentPlaylist = [];
+    var currentIndex = 0;
+    var isPlaying = false;
+    var lastVolume = 0.5;
 
-    /* -------- STATE -------- */
-    let currentIndex = 0;
-    let isPlaying = false;
-    let filteredIndexes = playlist.map((_, i) => i);
-    let lastVolume = 0.5;
+    /* Favorites & recent */
+    var favorites = [];
+    var recentPlays = [];
 
-    /* -------- UTIL -------- */
+    /* DOM refs */
+    var viewHome = document.getElementById('view-home');
+    var viewPlayer = document.getElementById('view-player');
+
+    var audio = document.getElementById("audio-player");
+    var playPauseBtn = document.getElementById("play-pause-btn");
+    var prevBtn = document.getElementById("prev-btn");
+    var nextBtn = document.getElementById("next-btn");
+    var volumeSlider = document.getElementById("volume-slider");
+    var seekSlider = document.getElementById("seek-slider");
+    var progressBar = document.getElementById("progress-bar");
+    var currentTimeEl = document.getElementById("current-time");
+    var totalTimeEl = document.getElementById("total-time");
+    var playerTitleEl = document.getElementById("player-title");
+    var tracklistContainer = document.getElementById("tracklist");
+    var lyricsContentEl = document.getElementById("lyrics-content");
+    var queueListEl = document.getElementById("queue-list");
+    var currentTitleEl = document.getElementById("current-title");
+    var currentInfoTextEl = document.getElementById("current-info-text");
+    var albumWrapper = document.getElementById("album-wrapper");
+    var muteIcon = document.getElementById("mute-icon");
+    var searchInput = document.getElementById("search-input");
+    var trackCountEl = document.getElementById("track-count");
+    var miniCoverEl = document.getElementById("mini-cover");
+    var playlistCategoryEl = document.getElementById("playlist-category");
+    var playlistTitleEl = document.getElementById("playlist-title");
+    var playlistDescEl = document.getElementById("playlist-desc");
+    var favListEl = document.getElementById("fav-list");
+    var recentListEl = document.getElementById("recent-list");
+
+    var gMiniPlayer = document.getElementById('global-mini-player');
+    var gMiniCover = document.getElementById('g-mini-cover');
+    var gMiniTitle = document.getElementById('g-mini-title');
+    var gMiniPlayBtn = document.getElementById('g-mini-play');
+
+    // Sidebar elements
+    var leftSidebar = document.getElementById('left-sidebar');
+    var rightSidebar = document.getElementById('right-sidebar');
+    var btnOpenLeft = document.getElementById('btn-open-left');
+    var btnOpenRight = document.getElementById('btn-open-right');
+    var btnCloseLeft = document.getElementById('btn-close-left');
+    var btnCloseRight = document.getElementById('btn-close-right');
+
+    // Pages & Panels
+    var appPages = ['page-search', 'page-library', 'page-liked', 'page-artists', 'page-create'];
+    var appPanels = ['panel-profile', 'panel-settings', 'panel-theme', 'panel-logout'];
+
+    /* -------- NAVIGATION -------- */
+    function hideAllPages() {
+      appPages.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+    }
+
+    function closeAllPanels() {
+      appPanels.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+    }
+
+    function openPage(id) {
+      hideAllPages();
+      closeAllPanels();
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('hidden');
+
+      if (id === 'page-artists') renderArtistsPage();
+      if (id === 'page-liked') renderLikedPage();
+      if (id === 'page-library') renderLibraryPage();
+    }
+
+    function closePage(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function openPanel(id) {
+      hideAllPages();
+      closeAllPanels();
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+
+    function closePanel(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function switchView(viewName) {
+      hideAllPages();
+      closeAllPanels();
+      if (viewName === 'player') {
+        viewHome.classList.add('hidden');
+        viewPlayer.classList.remove('hidden');
+        viewPlayer.classList.add('flex');
+        window.scrollTo(0, 0);
+      } else {
+        viewPlayer.classList.add('hidden');
+        viewPlayer.classList.remove('flex');
+        viewHome.classList.remove('hidden');
+        window.scrollTo(0, 0);
+      }
+    }
+
+    /* Sidebar Toggle Helpers */
+    function openLeftSidebar() {
+      if (leftSidebar) {
+        leftSidebar.classList.remove('-translate-x-full');
+      }
+    }
+    function closeLeftSidebar() {
+      if (leftSidebar && window.innerWidth < 768) {
+        leftSidebar.classList.add('-translate-x-full');
+      }
+    }
+    function openRightSidebar() {
+      if (rightSidebar) {
+        rightSidebar.classList.remove('translate-x-full');
+      }
+    }
+    function closeRightSidebar() {
+      if (rightSidebar && window.innerWidth < 768) {
+        rightSidebar.classList.add('translate-x-full');
+      }
+    }
+
+    /* -------- HERO SLIDESHOW -------- */
+    function initHeroSlideshow() {
+      renderHeroSlide();
+      startSlideTimer();
+    }
+
+    function renderHeroSlide() {
+      var slide = heroSlides[currentSlide];
+      var imgEl = document.getElementById('hero-image');
+      var titleEl = document.getElementById('hero-title');
+      var descEl = document.getElementById('hero-desc');
+      var tagEl = document.getElementById('hero-tag');
+      var indicatorsEl = document.getElementById('hero-indicators');
+
+      titleEl.classList.remove('hero-animated');
+      descEl.classList.remove('hero-animated');
+      imgEl.style.opacity = '0';
+
+      setTimeout(function () {
+        imgEl.src = slide.image;
+        titleEl.textContent = slide.title;
+        descEl.textContent = slide.desc;
+        tagEl.textContent = slide.tag;
+
+        if (slide.key === 'arijit') {
+          titleEl.classList.add('neon-text-anim');
+        } else {
+          titleEl.classList.remove('neon-text-anim');
+        }
+
+        titleEl.classList.add('hero-animated');
+        descEl.classList.add('hero-animated');
+        imgEl.style.opacity = '1';
+      }, 200);
+
+      indicatorsEl.innerHTML = heroSlides.map(function (_, idx) {
+        return '<div class="w-2 h-2 rounded-full transition-all duration-300 ' +
+          (idx === currentSlide ? 'bg-white w-6' : 'bg-white/40') +
+          '" onclick="setHeroSlide(' + idx + ')"></div>';
+      }).join('');
+    }
+
+    function startSlideTimer() {
+      if (slideInterval) clearInterval(slideInterval);
+      slideInterval = setInterval(function () {
+        currentSlide = (currentSlide + 1) % heroSlides.length;
+        renderHeroSlide();
+      }, 4000);
+    }
+
+    function setHeroSlide(idx) {
+      currentSlide = idx;
+      renderHeroSlide();
+      startSlideTimer();
+    }
+
+    function openHeroArtist() {
+      var key = heroSlides[currentSlide].key;
+      openArtist(key);
+    }
+
+    /* -------- HOME GRID -------- */
+    function filterArtists(category) {
+      document.querySelectorAll('.filter-btn').forEach(function (btn) {
+        if (category === 'all' && btn.dataset.filter === 'all') {
+          btn.classList.remove('bg-slate-800', 'border', 'border-slate-600', 'text-slate-300');
+          btn.classList.add('bg-purple-600', 'text-white');
+        } else if (btn.dataset.filter === category) {
+          btn.classList.remove('bg-slate-800', 'border', 'border-slate-600', 'text-slate-300');
+          btn.classList.add('bg-purple-600', 'text-white');
+        } else {
+          btn.classList.remove('bg-purple-600', 'text-white');
+          btn.classList.add('bg-slate-800', 'border', 'border-slate-600', 'text-slate-300');
+        }
+      });
+
+      var grid = document.getElementById('artists-grid');
+      grid.innerHTML = '';
+
+      Object.keys(artistsData).forEach(function (key) {
+        var artist = artistsData[key];
+        if (category === 'all' || artist.category === category) {
+          var card = document.createElement('div');
+          card.className = 'music-card group relative bg-slate-900/60 border border-slate-700/50 rounded-2xl overflow-hidden cursor-pointer h-72 flex flex-col neon-hover';
+          card.onclick = function () { openArtist(key); };
+
+          var totalTracks = (artist.tracks && artist.tracks.length) ? artist.tracks.length : 0;
+
+          card.innerHTML =
+            '<div class="relative h-48 overflow-hidden">' +
+            '<img src="' + artist.gridImage + '" class="w-full h-full object-cover" onerror="this.src=\'https://placehold.co/600x600/1e1b4b/ffffff?text=Music\'">' +
+            '<div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>' +
+            '<button class="absolute bottom-3 right-3 w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/40 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300">▶</button>' +
+            '</div>' +
+            '<div class="p-4 flex-1 flex flex-col justify-center glass-panel">' +
+            '<h4 class="text-lg font-bold text-white group-hover:text-purple-300 transition truncate">' + artist.name + '</h4>' +
+            '<p class="text-sm text-slate-400 truncate">' + artist.desc + ' · ' + totalTracks + ' tracks</p>' +
+            '</div>';
+
+          grid.appendChild(card);
+        }
+      });
+    }
+
+    /* ARTISTS PAGE GRID */
+    function renderArtistsPage() {
+      var grid = document.getElementById('artists-page-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      Object.keys(artistsData).forEach(function (key) {
+        var artist = artistsData[key];
+        var card = document.createElement('div');
+        card.className = 'music-card group bg-slate-900/70 border border-slate-700/60 rounded-2xl overflow-hidden cursor-pointer neon-hover';
+        card.onclick = function () {
+          openArtist(key);
+          closePage('page-artists');
+        };
+        var totalTracks = (artist.tracks && artist.tracks.length) ? artist.tracks.length : 0;
+        card.innerHTML =
+          '<div class="relative h-32 overflow-hidden">' +
+          '<img src="' + artist.gridImage + '" class="w-full h-full object-cover" onerror="this.src=\'https://placehold.co/600x600/1e1b4b/ffffff?text=Music\'">' +
+          '<div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>' +
+          '</div>' +
+          '<div class="p-3 flex flex-col justify-center">' +
+          '<h4 class="text-sm font-bold text-white truncate">' + artist.name + '</h4>' +
+          '<p class="text-[11px] text-slate-400 truncate">' + artist.category + ' · ' + totalTracks + ' tracks</p>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+
+    /* -------- PLAYER LOGIC -------- */
+    function openArtist(key) {
+      var data = artistsData[key];
+      if (!data) return;
+
+      playlistTitleEl.textContent = data.name;
+      playlistCategoryEl.textContent = data.category + ' Special';
+      playlistDescEl.textContent = data.desc;
+
+      var albumPhoto = document.getElementById('album-photo');
+      albumPhoto.src = data.playerImage;
+      miniCoverEl.src = data.playerImage;
+
+      if (trackCountEl) {
+        trackCountEl.textContent = data.tracks.length + ' tracks · Auto-next enabled';
+      }
+
+      currentPlaylist = data.tracks;
+      currentIndex = 0;
+      if (searchInput) searchInput.value = '';
+
+      renderTracklist();
+      loadTrack(0, false);
+      switchView('player');
+    }
+
     function formatTime(s) {
       if (isNaN(s)) return "0:00";
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60).toString().padStart(2, "0");
-      return `${m}:${sec}`;
+      var m = Math.floor(s / 60);
+      var sec = Math.floor(s % 60).toString().padStart(2, "0");
+      return m + ':' + sec;
     }
 
-    function getFilteredIndexes() {
-      const q = (searchInput?.value || "").toLowerCase();
-      return playlist
-        .map((track, idx) => ({ track, idx }))
-        .filter(({ track }) => {
+    function getFilteredTracks() {
+      var q = (searchInput ? searchInput.value : "").toLowerCase();
+      return currentPlaylist
+        .map(function (track, idx) { return { track: track, idx: idx }; })
+        .filter(function (item) {
           if (!q) return true;
-          return track.title.toLowerCase().includes(q) || track.artist.toLowerCase().includes(q);
-        })
-        .map(({ idx }) => idx);
+          return item.track.title.toLowerCase().includes(q) || item.track.artist.toLowerCase().includes(q);
+        });
     }
 
-    /* -------- TRACKLIST RENDER -------- */
+    function isFavoriteTrack(track) {
+      return favorites.some(function (f) { return f.title === track.title && f.artist === track.artist; });
+    }
+
     function renderTracklist() {
-      filteredIndexes = getFilteredIndexes();
+      var filtered = getFilteredTracks();
       tracklistContainer.innerHTML = "";
 
-      if (filteredIndexes.length === 0) {
-        const empty = document.createElement("div");
+      if (trackCountEl) {
+        var total = currentPlaylist.length || 0;
+        var visible = filtered.length || 0;
+        if (!total) {
+          trackCountEl.textContent = '0 tracks';
+        } else if (visible === total) {
+          trackCountEl.textContent = total + ' tracks · Auto-next enabled';
+        } else {
+          trackCountEl.textContent = visible + ' / ' + total + ' tracks · Filtered';
+        }
+      }
+
+      if (filtered.length === 0) {
+        var empty = document.createElement("div");
         empty.className = "px-4 py-6 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-400 text-center";
         empty.textContent = "No tracks match your search.";
         tracklistContainer.appendChild(empty);
         return;
       }
 
-      filteredIndexes.forEach((originalIndex, displayIndex) => {
-        const t = playlist[originalIndex];
-        const row = document.createElement("div");
-        row.className =
-          "track-row px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between border border-transparent";
-        row.dataset.index = originalIndex;
+      filtered.forEach(function (item, displayIndex) {
+        var track = item.track;
+        var idx = item.idx;
+        var row = document.createElement("div");
+        row.className = "track-row px-3 py-2.5 rounded-xl cursor-pointer flex items-center justify-between border border-transparent";
+        row.dataset.index = idx;
+
+        var favActive = isFavoriteTrack(track);
 
         row.innerHTML = `
           <div class="flex items-center gap-3 min-w-0">
             <div class="w-5 text-[11px] text-slate-500">${displayIndex + 1}</div>
-            <div class="min-w-0">
-              <p class="text-xs sm:text-sm font-medium truncate">${t.title}</p>
-              <p class="text-[11px] text-slate-500 truncate">${t.artist}</p>
+            <div class="flex flex-col min-w-0">
+              <p class="text-sm font-semibold text-white truncate">${track.title}</p>
+              <p class="text-[11px] text-slate-400 truncate">${track.artist}</p>
             </div>
           </div>
-          <div class="flex items-center gap-2 text-[11px] text-slate-500">
-            <span class="hidden sm:inline">▶</span>
+          <div class="flex items-center gap-3">
+            <button data-fav="${idx}" class="text-sm ${favActive ? 'text-pink-400' : 'text-slate-400'} hover:text-pink-400">♥</button>
+            <button class="text-xl text-slate-400 hover:text-purple-400">⋮</button>
           </div>
         `;
 
-        row.onclick = () => loadTrack(originalIndex, true);
+        row.addEventListener('click', function () { loadTrack(idx, true); });
+
+        var favBtn = row.querySelector('button[data-fav]');
+        favBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleFavorite(track);
+          renderTracklist();
+        });
+
         tracklistContainer.appendChild(row);
       });
 
       highlightPlaying();
     }
 
-    /* -------- LOAD TRACK -------- */
-    function loadTrack(idx, autoplay = false) {
+    function loadTrack(idx, autoplay) {
+      if (idx < 0 || idx >= currentPlaylist.length) return;
       currentIndex = idx;
-      const track = playlist[idx];
+      var track = currentPlaylist[idx];
 
       audio.src = track.url;
       playerTitleEl.textContent = track.title;
       currentTitleEl.textContent = track.title;
 
-      if (miniCover && albumPhoto) {
-        miniCover.src = albumPhoto.src;
-      }
-
-      updateLyrics(track.title);
+      updateLyrics(track.title, track.artist);
       updateQueue();
       highlightPlaying();
+      addRecentPlay(track);
+      updateGlobalMiniPlayer();
 
       if (autoplay) {
         play();
       } else {
         pause();
+        progressBar.style.width = "0%";
+        currentTimeEl.textContent = "0:00";
       }
     }
 
-    /* -------- HIGHLIGHT CURRENT TRACK -------- */
     function highlightPlaying() {
-      document.querySelectorAll(".track-row").forEach(row => {
+      document.querySelectorAll(".track-row").forEach(function (row) {
         row.classList.remove("is-playing");
       });
-      const active = document.querySelector(`.track-row[data-index="${currentIndex}"]`);
+      var active = document.querySelector('.track-row[data-index="' + currentIndex + '"]');
       if (active) {
         active.classList.add("is-playing");
         active.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }
     }
 
-    /* -------- LYRICS & QUEUE -------- */
-    function updateLyrics(title) {
+    function updateLyrics(title, artist) {
       if (!lyricsContentEl) return;
-      const info = lyricsData.find(l => l.title === title);
-      lyricsContentEl.textContent = info ? info.text : "No lyrics available.";
+      lyricsContentEl.textContent = `🎵 Lyrics for: ${title}
+🎤 Artist: ${artist}
+
+(Real-time lyrics would appear here...)`;
     }
 
     function updateQueue() {
       if (!queueListEl) return;
       queueListEl.innerHTML = "";
-      for (let i = 1; i <= 3; i++) {
-        const idx = (currentIndex + i) % playlist.length;
-        const p = document.createElement("p");
-        p.textContent = `• ${playlist[idx].title}`;
+      if (!currentPlaylist.length) return;
+      for (var i = 1; i <= 3; i++) {
+        var idx = (currentIndex + i) % currentPlaylist.length;
+        var p = document.createElement("p");
+        p.textContent = '• ' + currentPlaylist[idx].title;
         queueListEl.appendChild(p);
       }
     }
 
-    /* -------- NEXT / PREV -------- */
-    function getNextIndex() {
-      if (currentIndex === playlist.length - 1) return 0;
-      return currentIndex + 1;
-    }
-
-    function getPrevIndex() {
-      if (currentIndex === 0) return playlist.length - 1;
-      return currentIndex - 1;
-    }
-
-    /* -------- PLAY / PAUSE -------- */
     function play() {
-      if (!audio.src) loadTrack(currentIndex, false);
-      audio.play().then(() => {
-        isPlaying = true;
-        playPauseBtn.textContent = "⏸";
-        currentInfoTextEl.innerHTML =
-          `Now Playing: <span class="font-semibold">${playlist[currentIndex].title}</span>`;
-        if (albumWrapper) albumWrapper.classList.add("is-playing");
-      }).catch(err => console.error("Play error:", err));
+      var playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(function () {
+          isPlaying = true;
+          playPauseBtn.textContent = "⏸";
+          if (currentPlaylist[currentIndex]) {
+            currentInfoTextEl.innerHTML =
+              'Now Playing (' + (currentIndex + 1) + '/' + currentPlaylist.length + '): ' +
+              '<span class="font-semibold text-cyan-300">' + currentPlaylist[currentIndex].title + '</span>';
+          }
+          if (albumWrapper) albumWrapper.classList.add("is-playing");
+          updateGlobalMiniPlayer();
+        }).catch(function (err) {
+          console.error("Play error:", err);
+          isPlaying = false;
+          playPauseBtn.textContent = "⏯";
+        });
+      }
     }
 
     function pause() {
@@ -554,207 +1469,298 @@
       isPlaying = false;
       playPauseBtn.textContent = "⏯";
       if (albumWrapper) albumWrapper.classList.remove("is-playing");
+      updateGlobalMiniPlayer();
     }
 
-    playPauseBtn.onclick = () => (isPlaying ? pause() : play());
+    /* Favorites & Recent */
+    function toggleFavorite(track) {
+      var existingIndex = favorites.findIndex(function (f) {
+        return f.title === track.title && f.artist === track.artist;
+      });
+      if (existingIndex === -1) {
+        favorites.push({ title: track.title, artist: track.artist });
+      } else {
+        favorites.splice(existingIndex, 1);
+      }
+      renderFavorites();
+    }
 
-    prevBtn.onclick = () => {
-      const prevIndex = getPrevIndex();
-      loadTrack(prevIndex, true);
-    };
+    function renderFavorites() {
+      if (!favListEl) return;
+      favListEl.innerHTML = "";
+      if (!favorites.length) {
+        favListEl.innerHTML = '<p class="text-xs text-slate-500">Tap ♥ on any track to add it here.</p>';
+        return;
+      }
+      favorites.forEach(function (f) {
+        var item = document.createElement('button');
+        item.className = 'w-full text-left p-2 rounded-xl bg-slate-800/70 hover:bg-slate-700 text-xs flex justify-between items-center';
+        item.innerHTML = '<span class="truncate">' + f.title + '</span><span class="ml-2 text-[10px] text-slate-400">' + f.artist + '</span>';
+        item.onclick = function () { playFromLibrary(f.title, f.artist); };
+        favListEl.appendChild(item);
+      });
+    }
 
-    nextBtn.onclick = () => {
-      const nextIndex = getNextIndex();
-      loadTrack(nextIndex, true);
-    };
+    function addRecentPlay(track) {
+      var key = track.title + '|' + track.artist;
+      recentPlays = recentPlays.filter(function (k) { return k !== key; });
+      recentPlays.unshift(key);
+      if (recentPlays.length > 10) recentPlays.pop();
+      renderRecent();
+    }
 
-    /* -------- AUDIO EVENTS -------- */
-    audio.addEventListener("loadedmetadata", () => {
+    function renderRecent() {
+      if (!recentListEl) return;
+      recentListEl.innerHTML = "";
+      if (!recentPlays.length) {
+        recentListEl.innerHTML = '<p class="text-xs text-slate-500">No plays yet.</p>';
+        return;
+      }
+      recentPlays.forEach(function (key) {
+        var parts = key.split('|');
+        var title = parts[0];
+        var artist = parts[1];
+        var p = document.createElement('button');
+        p.className = 'block w-full text-left text-[11px] text-slate-300 hover:text-purple-300 truncate';
+        p.textContent = title + ' – ' + artist;
+        p.onclick = function () { playFromLibrary(title, artist); };
+        recentListEl.appendChild(p);
+      });
+    }
+
+    function playFromLibrary(title, artist) {
+      var foundArtistKey = null;
+      var foundIndex = -1;
+      Object.keys(artistsData).forEach(function (key) {
+        if (foundArtistKey) return;
+        var tracks = artistsData[key].tracks;
+        tracks.forEach(function (t, idx) {
+          if (t.title === title && t.artist === artist) {
+            foundArtistKey = key;
+            foundIndex = idx;
+          }
+        });
+      });
+      if (foundArtistKey) {
+        openArtist(foundArtistKey);
+        loadTrack(foundIndex, true);
+      }
+    }
+
+    /* Global mini player helpers */
+    function updateGlobalMiniPlayer() {
+      if (!currentPlaylist.length) return;
+      var track = currentPlaylist[currentIndex];
+      gMiniCover.src = miniCoverEl.src || albumWrapper.querySelector('img').src;
+      gMiniTitle.textContent = track.title;
+      gMiniPlayBtn.textContent = isPlaying ? '⏸' : '⏯';
+      gMiniPlayer.classList.remove('hidden');
+    }
+
+    function closeMiniPlayer() {
+      pause();
+      gMiniPlayer.classList.add('hidden');
+    }
+
+    function togglePlayFromMini() {
+      if (isPlaying) pause(); else play();
+    }
+
+    function prevTrack() {
+      if (!currentPlaylist.length) return;
+      var newIndex = currentIndex - 1;
+      if (newIndex < 0) newIndex = currentPlaylist.length - 1;
+      loadTrack(newIndex, true);
+    }
+
+    function nextTrack() {
+      if (!currentPlaylist.length) return;
+      var newIndex = (currentIndex + 1) % currentPlaylist.length;
+      loadTrack(newIndex, true);
+    }
+
+    /* LIKED + LIBRARY PAGES RENDER */
+    function renderLikedPage() {
+      var container = document.getElementById('liked-list');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!favorites.length) {
+        container.innerHTML = '<p class="text-slate-500">♥ Songs you like will appear here.</p>';
+        return;
+      }
+      favorites.forEach(function (f) {
+        var row = document.createElement('button');
+        row.className = 'w-full text-left p-3 rounded-xl bg-slate-900/70 hover:bg-slate-800 flex justify-between items-center text-sm';
+        row.innerHTML = '<span class="truncate">' + f.title + '</span><span class="ml-2 text-[11px] text-slate-400">' + f.artist + '</span>';
+        row.onclick = function () { playFromLibrary(f.title, f.artist); };
+        container.appendChild(row);
+      });
+    }
+
+    function renderLibraryPage() {
+      var favContainer = document.getElementById('library-fav');
+      var recContainer = document.getElementById('library-recent');
+      if (favContainer) {
+        favContainer.innerHTML = '';
+        if (!favorites.length) {
+          favContainer.innerHTML = '<p class="text-xs text-slate-500">No favorites yet.</p>';
+        } else {
+          favorites.forEach(function (f) {
+            var row = document.createElement('button');
+            row.className = 'w-full text-left p-2 rounded-xl bg-slate-900/70 hover:bg-slate-800 flex justify-between items-center text-xs';
+            row.innerHTML = '<span class="truncate">' + f.title + '</span><span class="ml-2 text-[10px] text-slate-400">' + f.artist + '</span>';
+            row.onclick = function () { playFromLibrary(f.title, f.artist); };
+            favContainer.appendChild(row);
+          });
+        }
+      }
+
+      if (recContainer) {
+        recContainer.innerHTML = '';
+        if (!recentPlays.length) {
+          recContainer.innerHTML = '<p class="text-xs text-slate-500">No recent plays.</p>';
+        } else {
+          recentPlays.forEach(function (key) {
+            var parts = key.split('|');
+            var title = parts[0];
+            var artist = parts[1];
+            var row = document.createElement('button');
+            row.className = 'w-full text-left p-2 rounded-xl bg-slate-900/70 hover:bg-slate-800 text-[11px] text-slate-300 truncate';
+            row.textContent = title + ' – ' + artist;
+            row.onclick = function () { playFromLibrary(title, artist); };
+            recContainer.appendChild(row);
+          });
+        }
+      }
+    }
+
+    /* THEME & LOGOUT */
+    function toggleThemeReal() {
+      document.body.classList.toggle('light-theme');
+      // You can add more CSS for .light-theme if you want a real light mode.
+    }
+
+    function confirmLogout() {
+      pause();
+      closeAllPanels();
+      hideAllPages();
+      switchView('home');
+      // Here you can plug in real auth/logout if needed.
+    }
+
+    /* -------- EVENTS -------- */
+    playPauseBtn.onclick = function () { isPlaying ? pause() : play(); };
+    prevBtn.onclick = function () { prevTrack(); };
+    nextBtn.onclick = function () { nextTrack(); };
+
+    audio.addEventListener("loadedmetadata", function () {
       totalTimeEl.textContent = formatTime(audio.duration);
       seekSlider.max = isNaN(audio.duration) ? 0 : audio.duration;
     });
 
-    audio.addEventListener("timeupdate", () => {
+    audio.addEventListener("timeupdate", function () {
       currentTimeEl.textContent = formatTime(audio.currentTime);
       seekSlider.value = audio.currentTime || 0;
       if (!isNaN(audio.duration) && audio.duration > 0) {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressBar.style.width = `${percent}%`;
-      } else {
-        progressBar.style.width = "0%";
+        var percent = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = percent + '%';
       }
     });
 
-    audio.addEventListener("ended", () => {
-      const nextIndex = getNextIndex();
+    audio.addEventListener("ended", function () {
+      if (!currentPlaylist.length) return;
+      var nextIndex = (currentIndex + 1) % currentPlaylist.length;
       loadTrack(nextIndex, true);
     });
 
-    /* -------- SEEK -------- */
-    seekSlider.oninput = () => {
-      const t = parseFloat(seekSlider.value);
+    audio.addEventListener("error", function (e) {
+      console.error("Audio Error:", e.target.error);
+    });
+
+    seekSlider.oninput = function () {
+      var t = parseFloat(seekSlider.value);
       if (!isNaN(t)) audio.currentTime = t;
     };
 
-    /* -------- VOLUME / MUTE -------- */
     if (volumeSlider) {
-      volumeSlider.oninput = () => {
-        const v = parseFloat(volumeSlider.value);
+      volumeSlider.oninput = function () {
+        var v = parseFloat(volumeSlider.value);
         audio.volume = isNaN(v) ? 0.5 : v;
-        if (v > 0) {
-          lastVolume = v;
-          if (muteIcon) muteIcon.textContent = "🔊";
-        } else {
-          if (muteIcon) muteIcon.textContent = "🔇";
-        }
+        if (v > 0) lastVolume = v;
+        muteIcon.textContent = v > 0 ? "🔊" : "🔇";
       };
     }
 
-    if (muteIcon && volumeSlider) {
-      muteIcon.onclick = () => {
-        if (audio.volume === 0) {
-          audio.volume = lastVolume || 0.5;
-          volumeSlider.value = audio.volume;
-          muteIcon.textContent = "🔊";
-        } else {
+    if (muteIcon) {
+      muteIcon.onclick = function () {
+        if (audio.volume > 0) {
           lastVolume = audio.volume;
           audio.volume = 0;
           volumeSlider.value = 0;
           muteIcon.textContent = "🔇";
+        } else {
+          audio.volume = lastVolume || 0.5;
+          volumeSlider.value = audio.volume;
+          muteIcon.textContent = "🔊";
         }
       };
     }
 
-    /* -------- SEARCH -------- */
-    searchInput?.addEventListener("input", () => {
-      renderTracklist();
-    });
+    if (searchInput) {
+      searchInput.addEventListener("input", renderTracklist);
+    }
 
-    /* -------- KEYBOARD SHORTCUTS -------- */
-    document.addEventListener("keydown", (e) => {
-      const active = document.activeElement;
-      const isInputLike =
-        active &&
-        (active.tagName === "INPUT" ||
-          active.tagName === "TEXTAREA" ||
-          active.isContentEditable);
-      if (isInputLike) return;
+    document.addEventListener("keydown", function (e) {
+      var active = document.activeElement;
+      if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
 
       if (e.code === "Space") {
         e.preventDefault();
         isPlaying ? pause() : play();
       } else if (e.code === "ArrowRight") {
         e.preventDefault();
-        audio.currentTime = Math.min(audio.currentTime + 5, audio.duration || audio.currentTime + 5);
+        if (!isNaN(audio.duration)) {
+          audio.currentTime = Math.min(audio.currentTime + 5, audio.duration);
+        }
       } else if (e.code === "ArrowLeft") {
         e.preventDefault();
         audio.currentTime = Math.max(audio.currentTime - 5, 0);
-      } else if (e.code === "ArrowUp") {
-        e.preventDefault();
-        const v = Math.min((audio.volume || 0) + 0.05, 1);
-        audio.volume = v;
-        if (volumeSlider) volumeSlider.value = v;
-      } else if (e.code === "ArrowDown") {
-        e.preventDefault();
-        const v = Math.max((audio.volume || 0) - 0.05, 0);
-        audio.volume = v;
-        if (volumeSlider) volumeSlider.value = v;
+      }
+    });
+
+    // Sidebar toggle events
+    if (btnOpenLeft) btnOpenLeft.addEventListener('click', openLeftSidebar);
+    if (btnCloseLeft) btnCloseLeft.addEventListener('click', closeLeftSidebar);
+    if (btnOpenRight) btnOpenRight.addEventListener('click', openRightSidebar);
+    if (btnCloseRight) btnCloseRight.addEventListener('click', closeRightSidebar);
+
+    // Close sidebars on resize (mobile -> desktop)
+    window.addEventListener('resize', function () {
+      if (window.innerWidth >= 768) {
+        if (leftSidebar) leftSidebar.classList.remove('-translate-x-full');
+        if (rightSidebar) rightSidebar.classList.remove('translate-x-full');
+      } else {
+        if (leftSidebar) leftSidebar.classList.add('-translate-x-full');
+        if (rightSidebar) rightSidebar.classList.add('translate-x-full');
       }
     });
 
     /* -------- INIT -------- */
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", function () {
       audio.volume = 0.5;
-      lastVolume = 0.5;
-      renderTracklist();
-      loadTrack(0, false);
+      currentSlide = Math.floor(Math.random() * heroSlides.length);
+      initHeroSlideshow();
+      filterArtists('all');
+      renderFavorites();
+      renderRecent();
+
+      // Ensure initial sidebar state based on screen size
+      if (window.innerWidth < 768) {
+        if (leftSidebar) leftSidebar.classList.add('-translate-x-full');
+        if (rightSidebar) rightSidebar.classList.add('translate-x-full');
+      }
     });
   </script>
 </body>
 
 </html>
-<!-- ⚡ FUTURISTIC SIGNATURE FOOTER — VIVEK YADAV (RAHAGIR) -->
-<footer class="w-full flex justify-center mt-12 mb-6">
-
-  <div class="relative group px-10 py-6 rounded-3xl
-              bg-slate-900/80 backdrop-blur-2xl
-              border border-slate-700/50 
-              shadow-[0_0_40px_rgba(139,92,246,0.5),_0_0_70px_rgba(34,211,238,0.25)]
-              hover:shadow-[0_0_60px_rgba(139,92,246,0.8),_0_0_100px_rgba(34,211,238,0.4)]
-              transition-all duration-700 overflow-hidden">
-
-    <!-- Floating Particles -->
-    <div class="pointer-events-none absolute inset-0 opacity-40">
-      <div class="absolute w-2 h-2 bg-purple-400 rounded-full animate-float1"></div>
-      <div class="absolute w-1.5 h-1.5 bg-cyan-300 rounded-full animate-float2"></div>
-      <div class="absolute w-2 h-2 bg-pink-400 rounded-full animate-float3"></div>
-    </div>
-
-    <!-- Neon Circle Glow -->
-    <div class="absolute -top-20 left-1/2 -translate-x-1/2 
-                w-72 h-72 bg-purple-600/20 blur-[80px] rounded-full 
-                group-hover:bg-purple-500/30 transition duration-700"></div>
-
-    <div class="absolute -bottom-28 right-1/2 translate-x-1/2 
-                w-64 h-64 bg-cyan-400/20 blur-[90px] rounded-full
-                group-hover:bg-cyan-300/30 transition duration-700"></div>
-
-    <!-- Hologram scanning beam -->
-    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700">
-      <div class="absolute inset-0 bg-gradient-to-r 
-                  from-transparent via-purple-500/20 to-transparent
-                  animate-scan"></div>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="relative z-10 text-center">
-      <h3 class="text-lg sm:text-xl font-extrabold 
-                 bg-gradient-to-r from-purple-300 via-cyan-300 to-purple-400 
-                 bg-clip-text text-transparent tracking-wide drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]">
-        Vivek Yadav (Rahagir)
-      </h3>
-
-      <p class="text-sm text-slate-300 mt-2">
-        📞 <span class="text-cyan-300 font-medium">9996445592</span>
-      </p>
-
-      <p class="text-sm text-slate-300">
-        📧 <span class="text-purple-300 font-medium">vivek.yadav.25cse@bmu.edu.in</span>
-      </p>
-
-      <p class="text-[11px] text-slate-500 mt-3 tracking-wider">
-        © 2025 NeoStream • Designed with ❤️ & Code by Vivek
-      </p>
-    </div>
-  </div>
-</footer>
-
-<!-- FOOTER ANIMATIONS -->
-<style>
-@keyframes scan {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-.animate-scan {
-  animation: scan 3.8s linear infinite;
-}
-
-@keyframes float1 {
-  0% { top: 20%; left: 10%; transform: scale(1);}
-  50% { top: 15%; left: 14%; transform: scale(1.3);}
-  100% { top: 20%; left: 10%; transform: scale(1);}
-}
-@keyframes float2 {
-  0% { bottom: 22%; right: 18%; transform: scale(1);}
-  50% { bottom: 20%; right: 15%; transform: scale(1.4);}
-  100% { bottom: 22%; right: 18%; transform: scale(1);}
-}
-@keyframes float3 {
-  0% { top: 60%; right: 10%; transform: scale(1);}
-  50% { top: 63%; right: 6%; transform: scale(1.4);}
-  100% { top: 60%; right: 10%; transform: scale(1);}
-}
-.animate-float1 { animation: float1 6s ease-in-out infinite; }
-.animate-float2 { animation: float2 7s ease-in-out infinite; }
-.animate-float3 { animation: float3 5.5s ease-in-out infinite; }
-</style>
