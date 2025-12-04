@@ -517,7 +517,7 @@
           <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
         </div>
         <div class="flex flex-col">
-          <span class="text-xs font-bold text-white">Felix</span>
+          <span id="sidebar-user-name" class="text-xs font-bold text-white">Felix</span>
           <span class="text-[10px] text-slate-400">Free Plan</span>
         </div>
       </div>
@@ -538,8 +538,16 @@
 
     <!-- Profile / Settings / Theme / Logout -->
     <div class="px-4 pt-4 pb-2 space-y-2 text-sm border-b border-slate-700/60">
-      <button onclick="openPanel('panel-profile')"
-        class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800/80 text-slate-200">
+      <button id="btn-login-sidebar" onclick="openPanel('panel-login')"
+        class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/40 text-purple-200 border border-purple-500/30">
+        <span class="flex items-center gap-2">
+          <span>🔐</span> <span>Login</span>
+        </span>
+        <span class="text-[10px] text-purple-300">Required</span>
+      </button>
+
+      <button id="btn-profile-sidebar" onclick="openPanel('panel-profile')"
+        class="hidden w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-slate-800/80 text-slate-200">
         <span class="flex items-center gap-2">
           <span>👤</span> <span>Profile</span>
         </span>
@@ -559,8 +567,8 @@
         </span>
         <span class="text-[10px] text-slate-400">Soon</span>
       </button>
-      <button onclick="openPanel('panel-logout')"
-        class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-red-500/70 text-slate-200">
+      <button id="btn-logout-sidebar" onclick="openPanel('panel-logout')"
+        class="hidden w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/70 hover:bg-red-500/70 text-slate-200">
         <span class="flex items-center gap-2">
           <span>🔒</span> <span>Logout</span>
         </span>
@@ -631,7 +639,7 @@
           class="md:hidden w-8 h-8 bg-gradient-to-br from-purple-500 to-cyan-400 rounded-full flex items-center justify-center font-bold">
           N
         </div>
-        <h1 class="text-xl sm:text-2xl font-bold tracking-wide">Good Morning, Felix</h1>
+        <h1 id="greeting-name" class="text-xl sm:text-2xl font-bold tracking-wide">Good Morning, Felix</h1>
       </div>
 
       <div class="flex items-center gap-3">
@@ -912,7 +920,7 @@
         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
           class="w-16 h-16 rounded-full border border-slate-700">
         <div>
-          <p class="text-lg font-semibold">Felix</p>
+          <p id="profile-user-name" class="text-lg font-semibold">Felix</p>
           <p class="text-slate-500 text-sm">Free Plan</p>
         </div>
       </div>
@@ -976,8 +984,63 @@
     </div>
   </div>
 
+  <!-- LOGIN PANEL -->
+  <div id="panel-login"
+    class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
+    <div
+      class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+      <button onclick="closePanel('panel-login')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
+      <h1 class="text-2xl font-bold text-purple-400 mb-4">Login / Sign Up</h1>
+      <p class="text-slate-400 text-sm mb-6">
+        Please login to stream music.
+      </p>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Email</label>
+          <input id="login-email" type="email" placeholder="you@example.com"
+            class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white focus:border-purple-500 outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Password</label>
+          <input id="login-password" type="password" placeholder="••••••••"
+            class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-600 text-white focus:border-purple-500 outline-none" />
+        </div>
+        <div class="flex gap-3">
+          <button onclick="performLogin()"
+            class="flex-1 px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg shadow-purple-900/20">
+            Login
+          </button>
+          <button onclick="performSignUp()"
+            class="flex-1 px-4 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-semibold">
+            Sign Up
+          </button>
+        </div>
+        <p id="auth-error" class="text-xs text-red-400 mt-2 hidden"></p>
+      </div>
+    </div>
+  </div>
+
   <!-- =================== SCRIPT =================== -->
+  <!-- Firebase SDKs (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
   <script>
+    /* -------- FIREBASE CONFIG -------- */
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7JscOrYY7GMMGMppkO79oGDBd-dLKr4c",
+      authDomain: "neostream-c9bf5.firebaseapp.com",
+      projectId: "neostream-c9bf5",
+      storageBucket: "neostream-c9bf5.firebasestorage.app",
+      messagingSenderId: "607234339904",
+      appId: "1:607234339904:web:439c628934146a5b601ba5",
+      measurementId: "G-7X3YDPZNYX"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
     /* -------- GLOBAL DATA STORE -------- */
     var SAMPLE_MP3 = "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3";
 
@@ -1127,6 +1190,8 @@
     var currentIndex = 0;
     var isPlaying = false;
     var lastVolume = 0.5;
+    var isLoggedIn = false;
+    var currentUserName = 'Guest';
 
     /* Favorites & recent - Load from localStorage */
     var favorites = JSON.parse(localStorage.getItem('neostream_favorites') || '[]');
@@ -1177,7 +1242,7 @@
 
     // Pages & Panels
     var appPages = ['page-search', 'page-library', 'page-liked', 'page-artists', 'page-create'];
-    var appPanels = ['panel-profile', 'panel-settings', 'panel-theme', 'panel-logout'];
+    var appPanels = ['panel-profile', 'panel-settings', 'panel-theme', 'panel-logout', 'panel-login'];
 
     /* -------- NAVIGATION -------- */
     function hideAllPages() {
@@ -1502,6 +1567,10 @@
     }
 
     function loadTrack(idx, autoplay) {
+      if (!isLoggedIn) {
+        openPanel('panel-login');
+        return;
+      }
       if (idx < 0 || idx >= currentPlaylist.length) return;
       currentIndex = idx;
       var track = currentPlaylist[idx];
@@ -1557,6 +1626,10 @@
     }
 
     function play() {
+      if (!isLoggedIn) {
+        openPanel('panel-login');
+        return;
+      }
       var playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(function () {
@@ -1751,19 +1824,127 @@
       }
     }
 
-    /* THEME & LOGOUT */
+    /* THEME & LOGOUT & LOGIN */
     function toggleThemeReal() {
       document.body.classList.toggle('light-theme');
-      // You can add more CSS for .light-theme if you want a real light mode.
+    }
+
+    function updateAuthUI() {
+      var btnLogin = document.getElementById('btn-login-sidebar');
+      var btnProfile = document.getElementById('btn-profile-sidebar');
+      var btnLogout = document.getElementById('btn-logout-sidebar');
+
+      // Name elements
+      var sidebarNameEl = document.getElementById('sidebar-user-name');
+      var greetingNameEl = document.getElementById('greeting-name');
+      var profileNameEl = document.getElementById('profile-user-name');
+
+      if (isLoggedIn) {
+        if (btnLogin) btnLogin.classList.add('hidden');
+        if (btnProfile) btnProfile.classList.remove('hidden');
+        if (btnLogout) btnLogout.classList.remove('hidden');
+
+        // Update names
+        if (sidebarNameEl) sidebarNameEl.textContent = currentUserName;
+        if (greetingNameEl) greetingNameEl.textContent = "Good Morning, " + currentUserName;
+        if (profileNameEl) profileNameEl.textContent = currentUserName;
+      } else {
+        if (btnLogin) btnLogin.classList.remove('hidden');
+        if (btnProfile) btnProfile.classList.add('hidden');
+        if (btnLogout) btnLogout.classList.add('hidden');
+
+        // Reset names (optional, or keep as Guest)
+        if (sidebarNameEl) sidebarNameEl.textContent = "Guest";
+        if (greetingNameEl) greetingNameEl.textContent = "Good Morning, Guest";
+      }
+    }
+
+    function performLogin() {
+      var email = document.getElementById('login-email').value;
+      var password = document.getElementById('login-password').value;
+      var errorEl = document.getElementById('auth-error');
+
+      if (!email || !password) {
+        if (errorEl) {
+          errorEl.textContent = "Please enter email and password.";
+          errorEl.classList.remove('hidden');
+        }
+        return;
+      }
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Signed in
+          closePanel('panel-login');
+          if (errorEl) errorEl.classList.add('hidden');
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorEl) {
+            errorEl.textContent = errorMessage;
+            errorEl.classList.remove('hidden');
+          }
+        });
+    }
+
+    function performSignUp() {
+      var email = document.getElementById('login-email').value;
+      var password = document.getElementById('login-password').value;
+      var errorEl = document.getElementById('auth-error');
+
+      if (!email || !password) {
+        if (errorEl) {
+          errorEl.textContent = "Please enter email and password.";
+          errorEl.classList.remove('hidden');
+        }
+        return;
+      }
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Signed up
+          closePanel('panel-login');
+          if (errorEl) errorEl.classList.add('hidden');
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorEl) {
+            errorEl.textContent = errorMessage;
+            errorEl.classList.remove('hidden');
+          }
+        });
     }
 
     function confirmLogout() {
       pause();
-      closeAllPanels();
-      hideAllPages();
-      switchView('home');
-      // Here you can plug in real auth/logout if needed.
+      auth.signOut().then(() => {
+        // Sign-out successful.
+        closeAllPanels();
+        hideAllPages();
+        switchView('home');
+      }).catch((error) => {
+        // An error happened.
+        console.error("Logout error", error);
+      });
     }
+
+    /* FIREBASE AUTH STATE LISTENER */
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in
+        isLoggedIn = true;
+        // Use email prefix as name if displayName is not set
+        currentUserName = user.displayName || user.email.split('@')[0];
+        updateAuthUI();
+      } else {
+        // User is signed out
+        isLoggedIn = false;
+        currentUserName = 'Guest';
+        updateAuthUI();
+      }
+    });
 
     /* -------- EVENTS -------- */
     playPauseBtn.onclick = function () { isPlaying ? pause() : play(); };
@@ -1877,6 +2058,7 @@
       filterArtists('all');
       renderFavorites();
       renderRecent();
+      updateAuthUI();
 
       // Ensure initial sidebar state based on screen size
       if (window.innerWidth < 768) {
