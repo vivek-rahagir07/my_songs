@@ -124,6 +124,7 @@
 
     /* Neon Text Animation */
     @keyframes neonText {
+
       0%,
       100% {
         text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
@@ -331,6 +332,110 @@
 
     .animate-scan {
       animation: scan 3.8s linear infinite;
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 640px) {
+      body {
+        font-size: 14px;
+      }
+
+      .player-btn {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 10px;
+      }
+
+      .track-row {
+        padding: 12px;
+        min-height: 60px;
+      }
+
+      .music-card {
+        min-height: 240px;
+      }
+
+      /* Larger touch targets for mobile */
+      button {
+        min-height: 44px;
+      }
+
+      /* Better spacing on mobile */
+      .glass-main {
+        padding: 1rem;
+      }
+
+      /* Optimize hero banner height */
+      #hero-banner {
+        height: 200px !important;
+      }
+
+      /* Improve filter button scrolling */
+      .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+      }
+    }
+
+    /* Tablet optimizations */
+    @media (min-width: 641px) and (max-width: 1024px) {
+      .track-row {
+        padding: 10px;
+      }
+    }
+
+    /* Touch-friendly seek slider */
+    #seek-slider {
+      height: 44px;
+      cursor: pointer;
+    }
+
+    /* Accessibility improvements */
+    button:focus,
+    input:focus {
+      outline: 2px solid rgba(139, 92, 246, 0.8);
+      outline-offset: 2px;
+    }
+
+    /* Loading state */
+    .loading {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      border-top-color: rgba(139, 92, 246, 1);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Footer styles */
+    .site-footer {
+      margin-top: 4rem;
+      padding: 2rem 1rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    @media (max-width: 640px) {
+      .site-footer {
+        padding: 1.5rem 1rem;
+        margin-top: 2rem;
+      }
     }
 
     /* Slide-in panel animation */
@@ -543,25 +648,26 @@
     </header>
 
     <div id="hero-banner"
-      class="relative w-full h-64 sm:h-80 rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-2xl shadow-purple-900/40 neon-border neon-hover"
-      onclick="openHeroArtist()">
-      <img id="hero-image" src="" alt="Hero"
+      class="relative w-full h-52 sm:h-80 rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-2xl shadow-purple-900/40 neon-border neon-hover"
+      onclick="openHeroArtist()" role="button" tabindex="0" aria-label="Featured artist banner">
+      <img id="hero-image" src="" alt="Hero artist"
         class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 transform scale-100 group-hover:scale-105"
         onerror="this.src='https://images.unsplash.com/photo-1514525253440-b393452e3728?w=1200&h=600&fit=crop'" />
       <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
 
-      <div class="absolute bottom-0 left-0 p-6 sm:p-10 flex flex-col gap-2 items-start z-10">
+      <div class="absolute bottom-0 left-0 p-4 sm:p-10 flex flex-col gap-1 sm:gap-2 items-start z-10">
         <span id="hero-tag"
-          class="px-3 py-1 rounded-full bg-purple-600/80 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider transition-opacity duration-500">
+          class="px-2 sm:px-3 py-1 rounded-full bg-purple-600/80 backdrop-blur-md text-[9px] sm:text-[10px] font-bold uppercase tracking-wider transition-opacity duration-500">
           Featured Artist
         </span>
         <h2 id="hero-title"
-          class="text-3xl sm:text-5xl font-bold hero-heading transition-all duration-500 hero-animated">
+          class="hero-heading text-2xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-cyan-300 to-purple-500 bg-clip-text text-transparent hero-animated">
         </h2>
-        <p id="hero-desc" class="text-slate-300 text-sm sm:text-base max-w-lg transition-all duration-500 hero-animated">
+        <p id="hero-desc"
+          class="text-slate-300 text-xs sm:text-base max-w-lg transition-all duration-500 hero-animated">
         </p>
       </div>
-      <div id="hero-indicators" class="absolute bottom-6 right-6 flex gap-2 z-20"></div>
+      <div id="hero-indicators" class="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 flex gap-2 z-20"></div>
     </div>
 
     <section>
@@ -594,7 +700,7 @@
       </div>
     </section>
 
-    
+
   </div>
 
   <!-- PLAYER VIEW -->
@@ -672,44 +778,47 @@
       </section>
     </div>
 
-    <footer class="w-full glass-player neon-border p-3 sm:p-4 flex flex-col gap-2 sticky bottom-4 z-30 mt-4">
+    <footer class="w-full glass-player neon-border p-4 sm:p-4 flex flex-col gap-2 sticky bottom-4 z-30 mt-4">
       <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3 w-2/5 min-w-[30%]">
+        <div class="flex items-center gap-2 sm:gap-3 w-2/5 min-w-[30%]">
           <div class="hidden sm:block w-10 h-10 rounded-lg overflow-hidden bg-slate-900 border border-slate-700">
-            <img id="mini-cover" src="" alt="cover-mini"
+            <img id="mini-cover" src="" alt="Album cover"
               onerror="this.src='https://placehold.co/80x80/020617/ffffff?text=Music';"
               class="w-full h-full object-cover" />
           </div>
           <div class="min-w-0">
-            <p class="text-[11px] uppercase tracking-wide text-slate-400">Now Playing</p>
+            <p class="text-[10px] sm:text-[11px] uppercase tracking-wide text-slate-400">Now Playing</p>
             <p id="player-title" class="text-xs sm:text-sm font-semibold truncate">Select a track</p>
           </div>
         </div>
 
         <div class="flex flex-col items-center w-3/5 sm:w-2/5">
-          <div class="flex items-center gap-3 mb-1">
-            <button id="prev-btn" class="player-btn text-lg sm:text-xl" title="Previous">⏮</button>
-            <button id="play-pause-btn" class="player-btn text-2xl sm:text-3xl pulse-glow" title="Play / Pause">⏯
+          <div class="flex items-center gap-4 sm:gap-3 mb-2">
+            <button id="prev-btn" class="player-btn text-xl sm:text-xl" title="Previous track"
+              aria-label="Previous track">⏮</button>
+            <button id="play-pause-btn" class="player-btn text-3xl sm:text-3xl pulse-glow" title="Play or Pause"
+              aria-label="Play or pause">⏯
             </button>
-            <button id="next-btn" class="player-btn text-lg sm:text-xl" title="Next">⏭</button>
+            <button id="next-btn" class="player-btn text-xl sm:text-xl" title="Next track"
+              aria-label="Next track">⏭</button>
           </div>
           <div class="flex items-center gap-2 w-full text-[10px] sm:text-[11px]">
-            <span id="current-time" class="w-8 text-right">0:00</span>
-            <div class="w-full relative h-3 flex items-center">
-              <input type="range" id="seek-slider" value="0" step="0.1"
+            <span id="current-time" class="w-10 text-right" aria-label="Current time">0:00</span>
+            <div class="w-full relative h-11 flex items-center">
+              <input type="range" id="seek-slider" value="0" step="0.1" aria-label="Seek slider"
                 class="absolute inset-0 w-full opacity-0 cursor-pointer z-10" />
-              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden relative">
                 <div id="progress-bar" class="h-full w-0 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500">
                 </div>
               </div>
             </div>
-            <span id="total-time" class="w-8 text-left">0:00</span>
+            <span id="total-time" class="w-10 text-left" aria-label="Total time">0:00</span>
           </div>
         </div>
 
         <div class="hidden sm:flex items-center gap-2 w-1/5 justify-end text-[11px]">
-          <span id="mute-icon" class="cursor-pointer text-lg">🔊</span>
-          <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5"
+          <button id="mute-icon" class="cursor-pointer text-lg" aria-label="Mute or unmute">🔊</button>
+          <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" aria-label="Volume control"
             class="w-24 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-400" />
         </div>
       </div>
@@ -734,8 +843,7 @@
   </div>
 
   <!-- LIKED SONGS PAGE -->
-  <div id="page-liked"
-    class="app-page hidden fixed inset-0 bg-slate-950/95 md:ml-60 md:mr-64 overflow-y-auto z-40 p-6">
+  <div id="page-liked" class="app-page hidden fixed inset-0 bg-slate-950/95 md:ml-60 md:mr-64 overflow-y-auto z-40 p-6">
     <button onclick="closePage('page-liked')"
       class="px-4 py-2 mb-6 rounded-full bg-slate-800 border border-slate-600 hover:bg-slate-700">
       ← Back
@@ -781,14 +889,12 @@
       ← Back
     </button>
     <h1 class="text-3xl font-bold mb-4">Create Playlist</h1>
-    <input id="playlist-name"
-      class="w-full px-4 py-3 mb-4 rounded-xl bg-slate-800 border border-slate-600 text-white"
+    <input id="playlist-name" class="w-full px-4 py-3 mb-4 rounded-xl bg-slate-800 border border-slate-600 text-white"
       placeholder="Playlist Name">
     <textarea id="playlist-desc"
       class="w-full px-4 py-3 h-32 rounded-xl bg-slate-800 border border-slate-600 text-white"
       placeholder="Playlist Description"></textarea>
-    <button
-      class="mt-4 px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-full">
+    <button class="mt-4 px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-full">
       Save Playlist (UI only)
     </button>
   </div>
@@ -798,7 +904,8 @@
   <!-- PROFILE PANEL -->
   <div id="panel-profile"
     class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
-    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+    <div
+      class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
       <button onclick="closePanel('panel-profile')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
       <h1 class="text-2xl font-bold mb-4">Profile</h1>
       <div class="flex items-center gap-4 mb-6">
@@ -818,7 +925,8 @@
   <!-- SETTINGS PANEL -->
   <div id="panel-settings"
     class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
-    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+    <div
+      class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
       <button onclick="closePanel('panel-settings')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
       <h1 class="text-2xl font-bold mb-4">Settings</h1>
       <div class="space-y-4 text-sm text-slate-300">
@@ -837,7 +945,8 @@
   <!-- THEME PANEL -->
   <div id="panel-theme"
     class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
-    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+    <div
+      class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
       <button onclick="closePanel('panel-theme')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
       <h1 class="text-2xl font-bold mb-4">Theme Mode</h1>
       <button onclick="toggleThemeReal()"
@@ -853,7 +962,8 @@
   <!-- LOGOUT PANEL -->
   <div id="panel-logout"
     class="hidden fixed inset-0 bg-black/40 backdrop-blur-md z-50 flex justify-end transition-all duration-300">
-    <div class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
+    <div
+      class="w-80 sm:w-96 h-full bg-slate-900/95 border-l border-slate-700 p-6 overflow-y-auto shadow-2xl slide-panel">
       <button onclick="closePanel('panel-logout')" class="text-slate-300 hover:text-white text-xl mb-6">←</button>
       <h1 class="text-2xl font-bold text-red-400 mb-4">Logout?</h1>
       <p class="text-slate-400 text-sm mb-6">
@@ -941,11 +1051,11 @@
         gridImage: "photo/diljitgrid.jpg",
         playerImage: "photo/preview.png",
         tracks: [
-          { title: "Lover", artist: "Diljit Dosanjh", url:"songs/Lover.mp3"},
-          { title: "G.O.A.T.", artist: "Diljit Dosanjh", url:"songs/goat.mp3"},
-          { title: "Vibe", artist: "Diljit Dosanjh", url:"songs/Vibe.mp3"},
-          { title: "Lemonade", artist: "Diljit Dosanjh", url:"songs/Lemonade.mp3"},
-          { title: "Peaches", artist: "Diljit Dosanjh", url:"songs/Peaches.mp3" }
+          { title: "Lover", artist: "Diljit Dosanjh", url: "songs/Lover.mp3" },
+          { title: "G.O.A.T.", artist: "Diljit Dosanjh", url: "songs/goat.mp3" },
+          { title: "Vibe", artist: "Diljit Dosanjh", url: "songs/Vibe.mp3" },
+          { title: "Lemonade", artist: "Diljit Dosanjh", url: "songs/Lemonade.mp3" },
+          { title: "Peaches", artist: "Diljit Dosanjh", url: "songs/Peaches.mp3" }
         ]
       },
       'prateek': {
@@ -1018,9 +1128,9 @@
     var isPlaying = false;
     var lastVolume = 0.5;
 
-    /* Favorites & recent */
-    var favorites = [];
-    var recentPlays = [];
+    /* Favorites & recent - Load from localStorage */
+    var favorites = JSON.parse(localStorage.getItem('neostream_favorites') || '[]');
+    var recentPlays = JSON.parse(localStorage.getItem('neostream_recent') || '[]');
 
     /* DOM refs */
     var viewHome = document.getElementById('view-home');
@@ -1485,6 +1595,8 @@
       } else {
         favorites.splice(existingIndex, 1);
       }
+      // Save to localStorage
+      localStorage.setItem('neostream_favorites', JSON.stringify(favorites));
       renderFavorites();
     }
 
@@ -1509,6 +1621,8 @@
       recentPlays = recentPlays.filter(function (k) { return k !== key; });
       recentPlays.unshift(key);
       if (recentPlays.length > 10) recentPlays.pop();
+      // Save to localStorage
+      localStorage.setItem('neostream_recent', JSON.stringify(recentPlays));
       renderRecent();
     }
 
@@ -1691,6 +1805,8 @@
         audio.volume = isNaN(v) ? 0.5 : v;
         if (v > 0) lastVolume = v;
         muteIcon.textContent = v > 0 ? "🔊" : "🔇";
+        // Save volume to localStorage
+        localStorage.setItem('neostream_volume', v);
       };
     }
 
@@ -1750,7 +1866,12 @@
 
     /* -------- INIT -------- */
     document.addEventListener("DOMContentLoaded", function () {
-      audio.volume = 0.5;
+      // Load saved volume or default to 0.5
+      var savedVolume = parseFloat(localStorage.getItem('neostream_volume')) || 0.5;
+      audio.volume = savedVolume;
+      if (volumeSlider) volumeSlider.value = savedVolume;
+      lastVolume = savedVolume;
+
       currentSlide = Math.floor(Math.random() * heroSlides.length);
       initHeroSlideshow();
       filterArtists('all');
@@ -1763,61 +1884,180 @@
         if (rightSidebar) rightSidebar.classList.add('translate-x-full');
       }
     });
+
+    /* Touch gesture support for mobile */
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', function (e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    document.addEventListener('touchend', function (e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+
+      // Only handle swipes on player view
+      if (viewPlayer.classList.contains('hidden')) return;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          // Swipe left - next track
+          nextTrack();
+        } else {
+          // Swipe right - previous track
+          prevTrack();
+        }
+      }
+    }
+
+    /* Keyboard accessibility for hero banner */
+    const heroBanner = document.getElementById('hero-banner');
+    if (heroBanner) {
+      heroBanner.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openHeroArtist();
+        }
+      });
+    }
+
+    /* Better error handling for audio */
+    audio.addEventListener('error', function (e) {
+      console.error('Audio playback error:', e);
+      const errorMsg = 'Unable to play this track. Please try another.';
+      if (currentInfoTextEl) {
+        currentInfoTextEl.innerHTML = '<span class="text-red-400">' + errorMsg + '</span>';
+      }
+    });
+
+    /* Loading state for audio */
+    audio.addEventListener('loadstart', function () {
+      if (playPauseBtn) playPauseBtn.classList.add('loading');
+    });
+
+    audio.addEventListener('canplay', function () {
+      if (playPauseBtn) playPauseBtn.classList.remove('loading');
+    });
   </script>
-</body>
 
-
-    <!-- CONTENT -->
-    <div class="relative z-10 text-center">
-      <h3 class="text-lg sm:text-xl font-extrabold 
+  <!-- FOOTER -->
+  <footer class="site-footer md:ml-60 md:mr-64">
+    <div class="relative z-10 text-center max-w-4xl mx-auto">
+      <h3 class="text-base sm:text-xl font-extrabold 
                  bg-gradient-to-r from-purple-300 via-cyan-300 to-purple-400 
                  bg-clip-text text-transparent tracking-wide drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]">
         Vivek Yadav (Rahagir)
       </h3>
 
-      <p class="text-sm text-slate-300 mt-2">
+      <p class="text-xs sm:text-sm text-slate-300 mt-2">
         📞 <span class="text-cyan-300 font-medium">9996445592</span>
       </p>
 
-      <p class="text-sm text-slate-300">
+      <p class="text-xs sm:text-sm text-slate-300">
         📧 <span class="text-purple-300 font-medium">vivek.yadav.25cse@bmu.edu.in</span>
       </p>
 
-      <p class="text-[11px] text-slate-500 mt-3 tracking-wider">
+      <p class="text-[10px] sm:text-[11px] text-slate-500 mt-3 tracking-wider">
         © 2025 NeoStream • Designed with ❤️ & Code by Vivek
       </p>
     </div>
-  </div>
-</footer>
+  </footer>
+
+</body>
 
 <!-- FOOTER ANIMATIONS -->
 <style>
-@keyframes scan {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-.animate-scan {
-  animation: scan 3.8s linear infinite;
-}
+  @keyframes scan {
+    0% {
+      transform: translateX(-100%);
+    }
 
-@keyframes float1 {
-  0% { top: 20%; left: 10%; transform: scale(1);}
-  50% { top: 15%; left: 14%; transform: scale(1.3);}
-  100% { top: 20%; left: 10%; transform: scale(1);}
-}
-@keyframes float2 {
-  0% { bottom: 22%; right: 18%; transform: scale(1);}
-  50% { bottom: 20%; right: 15%; transform: scale(1.4);}
-  100% { bottom: 22%; right: 18%; transform: scale(1);}
-}
-@keyframes float3 {
-  0% { top: 60%; right: 10%; transform: scale(1);}
-  50% { top: 63%; right: 6%; transform: scale(1.4);}
-  100% { top: 60%; right: 10%; transform: scale(1);}
-}
-.animate-float1 { animation: float1 6s ease-in-out infinite; }
-.animate-float2 { animation: float2 7s ease-in-out infinite; }
-.animate-float3 { animation: float3 5.5s ease-in-out infinite; }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-scan {
+    animation: scan 3.8s linear infinite;
+  }
+
+  @keyframes float1 {
+    0% {
+      top: 20%;
+      left: 10%;
+      transform: scale(1);
+    }
+
+    50% {
+      top: 15%;
+      left: 14%;
+      transform: scale(1.3);
+    }
+
+    100% {
+      top: 20%;
+      left: 10%;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float2 {
+    0% {
+      bottom: 22%;
+      right: 18%;
+      transform: scale(1);
+    }
+
+    50% {
+      bottom: 20%;
+      right: 15%;
+      transform: scale(1.4);
+    }
+
+    100% {
+      bottom: 22%;
+      right: 18%;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float3 {
+    0% {
+      top: 60%;
+      right: 10%;
+      transform: scale(1);
+    }
+
+    50% {
+      top: 63%;
+      right: 6%;
+      transform: scale(1.4);
+    }
+
+    100% {
+      top: 60%;
+      right: 10%;
+      transform: scale(1);
+    }
+  }
+
+  .animate-float1 {
+    animation: float1 6s ease-in-out infinite;
+  }
+
+  .animate-float2 {
+    animation: float2 7s ease-in-out infinite;
+  }
+
+  .animate-float3 {
+    animation: float3 5.5s ease-in-out infinite;
+  }
 </style>
 
 </html>
