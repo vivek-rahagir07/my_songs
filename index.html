@@ -604,8 +604,11 @@
 
   <!-- Global Mini Player -->
   <div id="global-mini-player"
-    class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-700/70 backdrop-blur-xl shadow-2xl hidden z-50">
-    <div class="max-w-6xl mx-auto flex items-center justify-between p-3 px-4 gap-3">
+    class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-700/70 backdrop-blur-xl shadow-2xl hidden z-50 relative overflow-hidden">
+    <!-- Visualizer as background -->
+    <canvas id="global-visualizer-canvas" width="1200" height="80"
+      class="absolute inset-0 w-full h-full opacity-30"></canvas>
+    <div class="max-w-6xl mx-auto flex items-center justify-between p-3 px-4 gap-3 relative z-10">
       <div class="flex items-center gap-3 min-w-0 cursor-pointer" onclick="switchView('player')">
         <div class="w-10 h-10 rounded-md bg-slate-800 overflow-hidden border border-slate-600">
           <img id="g-mini-cover" class="w-full h-full object-cover" alt="cover" />
@@ -1199,6 +1202,14 @@
     var favorites = JSON.parse(localStorage.getItem('neostream_favorites') || '[]');
     var recentPlays = JSON.parse(localStorage.getItem('neostream_recent') || '[]');
 
+    /* -------- AUDIO VISUALIZER -------- */
+    var audioContext = null;
+    var analyser = null;
+    var dataArray = null;
+    var bufferLength = 0;
+    var source = null;
+    var isVisualizerInitialized = false;
+
     /* DOM refs */
     var viewHome = document.getElementById('view-home');
     var viewPlayer = document.getElementById('view-player');
@@ -1632,6 +1643,12 @@
         openPanel('panel-login');
         return;
       }
+
+      // Initialize visualizeron first play (user interaction required
+      if (!isVisualizerInitialized) {
+        initVisualizer();
+      }
+
       var playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise.then(function () {
@@ -1658,6 +1675,74 @@
       playPauseBtn.textContent = "⏯";
       if (albumWrapper) albumWrapper.classList.remove("is-playing");
       updateGlobalMiniPlayer();
+    }
+
+    /* -------- AUDIO VISUALIZER FUNCTIONS -------- */
+    function initVisualizer() {
+      if (isVisualizerInitialized) return;
+
+      try {
+        // Create audio context
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+
+        bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        // Connect audio element to analyser
+        source = audioContext.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        isVisualizerInitialized = true;
+        drawVisualizer();
+      } catch (err) {
+        console.error("Visualizer init error:", err);
+      }
+    }
+
+    function drawVisualizer() {
+      requestAnimationFrame(drawVisualizer);
+
+      if (!analyser) return;
+
+      analyser.getByteFrequencyData(dataArray);
+
+      // Draw only on global mini player canvas
+      var globalCanvas = document.getElementById('global-visualizer-canvas');
+      if (globalCanvas) {
+        drawOnCanvas(globalCanvas, dataArray);
+      }
+    }
+
+    function drawOnCanvas(canvas, data) {
+      var ctx = canvas.getContext('2d');
+      var WIDTH = canvas.width;
+      var HEIGHT = canvas.height;
+
+      // Clear canvas with dark background
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.3)';
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+      var barWidth = (WIDTH / bufferLength) * 2.5;
+      var barHeight;
+      var x = 0;
+
+      for (var i = 0; i < bufferLength; i++) {
+        barHeight = (data[i] / 255) * HEIGHT * 0.8;
+
+        // Create gradient for each bar
+        var gradient = ctx.createLinearGradient(0, HEIGHT - barHeight, 0, HEIGHT);
+        gradient.addColorStop(0, 'rgba(139, 92, 246, 0.8)'); // Purple
+        gradient.addColorStop(0.5, 'rgba(34, 211, 238, 0.6)'); // Cyan
+        gradient.addColorStop(1, 'rgba(236, 72, 153, 0.4)'); // Pink
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+
+        x += barWidth + 1;
+      }
     }
 
     /* Favorites & Recent */
