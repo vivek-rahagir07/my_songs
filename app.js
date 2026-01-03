@@ -145,26 +145,23 @@ var artistsData = {
     gridImage: "photo/Prateek.jpg",
     playerImage: "player/kudan.png",
     tracks: [
-      { title: "cold/mess", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Kasoor", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Tum Jab Paas", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "100 Words", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Kho Gaye Hum Kahan", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Co2", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Mulaqat", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Dil Beparvah", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Tune Kaha", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Saansein", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Just A Word", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Raat Raazi", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Oh Love", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Holding On", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Yeh Pal", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Tere Hi Hum", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Kahaan Ho Tum", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Into The Night", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Favorite Peeps", artist: "Prateek Kuhad", url: SAMPLE_MP3 },
-      { title: "Bloom", artist: "Prateek Kuhad", url: SAMPLE_MP3 }
+      { title: "cold/mess", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/cold_mess.mp3" },
+      { title: "Kasoor", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Kasoor.mp3" },
+      { title: "Tum Jab Paas", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Tum Jab Paas .mp3" },
+
+
+      { title: "Co2", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Co2 - .mp3" },
+      { title: "Mulaqat", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Mulaqat.mp3" },
+      { title: "Dil Beparvah", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Dil Beparvah .mp3" },
+
+      { title: "Saansein", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Saansein .mp3" },
+      { title: "Just A Word", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Just_A_Word.mp3" },
+
+      { title: "Tere Hi Hum", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/tere_Hi_Hum.mp3" },
+
+      { title: "Khone Do", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Khone_Do.mp3" },
+      { title: "Favorite Peeps", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Favorite_Peeps.mp3" },
+      { title: "Shehron Ke Raaz", artist: "Prateek Kuhad", url: "Artist Songs/prateek kuhad/Shehron_Ke_Raaz.mp3" }
     ]
   },
   'irfan': {
@@ -989,9 +986,20 @@ function play() {
     initVisualizer();
   }
 
+  // Ensure AudioContext is resumed (browsers often suspend it)
+  if (audioContext && audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+
+  // Ensure manual unmute
+  audio.muted = false;
+
+  console.log("Attempting play. Current volume:", audio.volume, "Context state:", audioContext ? audioContext.state : 'null');
+
   var playPromise = audio.play();
   if (playPromise !== undefined) {
     playPromise.then(function () {
+      console.log("Playback started successfully.");
       isPlaying = true;
       playPauseBtn.textContent = "⏸";
       if (currentPlaylist[currentIndex]) {
