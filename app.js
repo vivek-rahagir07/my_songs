@@ -637,6 +637,9 @@ var bufferLength = 0;
 var source = null;
 var isVisualizerInitialized = false;
 
+// Artist View State
+var showAllArtists = false;
+
 /* DOM refs */
 var viewHome = document.getElementById('view-home');
 var viewPlayer = document.getElementById('view-player');
@@ -850,29 +853,65 @@ function filterArtists(category) {
   var grid = document.getElementById('artists-grid');
   grid.innerHTML = '';
 
-  Object.keys(artistsData).forEach(function (key) {
+  var filteredKeys = Object.keys(artistsData).filter(function (key) {
     var artist = artistsData[key];
-    if (category === 'all' || artist.category === category) {
-      var card = document.createElement('div');
-      card.className = 'music-card group relative bg-slate-900/60 border border-slate-700/50 rounded-2xl overflow-hidden cursor-pointer h-72 flex flex-col neon-hover';
-      card.onclick = function () { openArtist(key); };
-
-      var totalTracks = (artist.tracks && artist.tracks.length) ? artist.tracks.length : 0;
-
-      card.innerHTML =
-        '<div class="relative h-48 overflow-hidden">' +
-        '<img src="' + artist.gridImage + '" class="w-full h-full object-cover" onerror="this.src=\'https://placehold.co/600x600/1e1b4b/ffffff?text=Music\'">' +
-        '<div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>' +
-        '<button class="absolute bottom-3 right-3 w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/40 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300">▶</button>' +
-        '</div>' +
-        '<div class="p-4 flex-1 flex flex-col justify-center glass-panel">' +
-        '<h4 class="text-lg font-bold text-white group-hover:text-purple-300 transition truncate">' + artist.name + '</h4>' +
-        '<p class="text-sm text-slate-400 truncate">' + artist.desc + ' · ' + totalTracks + ' tracks</p>' +
-        '</div>';
-
-      grid.appendChild(card);
-    }
+    return category === 'all' || artist.category === category;
   });
+
+
+  var displayKeys = showAllArtists ? filteredKeys : filteredKeys.slice(0, 3);
+
+  // Update toggle button text/visibility
+  var toggleBtn = document.getElementById('view-all-artists-btn');
+  if (toggleBtn) {
+    if (filteredKeys.length <= 3) {
+      toggleBtn.classList.add('hidden');
+    } else {
+      toggleBtn.classList.remove('hidden');
+      toggleBtn.textContent = showAllArtists ? "Show Less" : "View All Artists";
+    }
+  }
+
+  displayKeys.forEach(function (key) {
+    var artist = artistsData[key];
+    var card = document.createElement('div');
+    card.className = 'music-card group relative bg-slate-900/60 border border-slate-700/50 rounded-2xl overflow-hidden cursor-pointer h-72 flex flex-col neon-hover';
+    card.onclick = function () { openArtist(key); };
+
+    var totalTracks = (artist.tracks && artist.tracks.length) ? artist.tracks.length : 0;
+
+    card.innerHTML =
+      '<div class="relative h-48 overflow-hidden">' +
+      '<img src="' + artist.gridImage + '" class="w-full h-full object-cover" onerror="this.src=\'https://placehold.co/600x600/1e1b4b/ffffff?text=Music\'">' +
+      '<div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition"></div>' +
+      '<button class="absolute bottom-3 right-3 w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/40 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300">▶</button>' +
+      '</div>' +
+      '<div class="p-4 flex-1 flex flex-col justify-center glass-panel">' +
+      '<h4 class="text-lg font-bold text-white group-hover:text-purple-300 transition truncate">' + artist.name + '</h4>' +
+      '<p class="text-sm text-slate-400 truncate">' + artist.desc + ' · ' + totalTracks + ' tracks</p>' +
+      '</div>';
+
+    grid.appendChild(card);
+  });
+}
+
+function toggleArtistView() {
+  showAllArtists = !showAllArtists;
+  // Re-run filter with current active category
+  var activeBtn = document.querySelector('.filter-btn.bg-purple-600');
+  var currentCategory = activeBtn ? activeBtn.dataset.filter : 'all';
+  filterArtists(currentCategory);
+}
+
+
+
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
 }
 
 /* ARTISTS PAGE GRID */
@@ -1729,6 +1768,7 @@ document.addEventListener("DOMContentLoaded", function () {
   renderFavorites();
   renderRecent();
   renderUserPlaylists();
+
   updateAuthUI();
 
   // Ensure initial sidebar state based on screen size
