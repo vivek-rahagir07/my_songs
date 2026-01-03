@@ -172,26 +172,24 @@ var artistsData = {
     gridImage: "photo/mmd irfan.jpg",
     playerImage: "player/mmd irfan.png",
     tracks: [
-      { title: "Banjaara", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Baarish", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Muskurane", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Phir Mohabbat", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Dard Dilo Ke", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Tu Hi Tu", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Tu Dua Hai Dua", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Hothon Se Chhu Lo Tum", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Chukar Mere Man Ko", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Pal Pal Dil Ke Paas", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Jab Tum Chaho", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Majboori", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Alfaz", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Dil Awara", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Sanam Teri Kasam - Reprise", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Ek Villain Mashup", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Kabira-Naina", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Aami Sudhu Cheyechi Tomay", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Kabhi Jo Badal Barse", artist: "Mohammed Irfan", url: SAMPLE_MP3 },
-      { title: "Hai Yehi Zindagi", artist: "Mohammed Irfan", url: SAMPLE_MP3 }
+      { title: "Banjaara", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/banjarra.mp3" },
+      { title: "Baarish", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/baarish.mp3" },
+      { title: "Muskurane", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/muskurane.mp3" },
+      { title: "Phir Mohabbat", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/phir mohbaat.mp3" },
+      { title: "Dard Dilo Ke", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Dard Dilo Ke The .mp3" },
+      { title: "Tu Hi Tu", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Tu Hi Tu.mp3" },
+      { title: "Tu Dua Hai Dua", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Tu Dua Hai Dua.mp3" },
+      { title: "Hothon Se Chhu Lo Tum", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Hothon_Se_Chhu_Lo_Tum.mp3" },
+
+      { title: "Jab Tum Chaho", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Jab Tum Chaho .mp3" },
+
+      { title: "Dil Awara", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Dil Awara.mp3" },
+      { title: "Sanam Teri Kasam - Reprise", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Sanam Teri Kasam .mp3" },
+      { title: "Ek Villain Mashup", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Ek Villain .mp3" },
+      { title: "Kabira-Naina", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Kabira - Naina.mp3" },
+      { title: "Aami Sudhu Cheyechi Tomay", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Ami-Sudhu.mp3" },
+      { title: "Kabhi Jo Badal Barse", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Kabhi Jo Badal Barse .mp3" },
+      { title: "Hai Yehi Zindagi", artist: "Mohammed Irfan", url: "Artist Songs/mmd irfan/Hai Yehi Zindagi Feat.mp3" }
     ]
   },
   'jubin': {
@@ -542,6 +540,7 @@ var currentUserName = 'Guest';
 /* Favorites & recent - Load from localStorage */
 var favorites = JSON.parse(localStorage.getItem('neostream_favorites') || '[]');
 var recentPlays = JSON.parse(localStorage.getItem('neostream_recent') || '[]');
+var userPlaylists = JSON.parse(localStorage.getItem('neostream_playlists') || '[]');
 
 /* -------- AUDIO VISUALIZER -------- */
 var audioContext = null;
@@ -597,6 +596,11 @@ var btnCloseRight = document.getElementById('btn-close-right');
 // Pages & Panels
 var appPages = ['page-search', 'page-library', 'page-liked', 'page-artists', 'page-create'];
 var appPanels = ['panel-profile', 'panel-settings', 'panel-theme', 'panel-logout', 'panel-login'];
+
+/* Global Search Refs */
+var globalSearchInput = document.getElementById('global-search-input');
+var searchResultsContainer = document.getElementById('search-results');
+var playerSearchBtn = document.getElementById('search-btn');
 
 /* -------- NAVIGATION -------- */
 function hideAllPages() {
@@ -845,13 +849,69 @@ function formatTime(s) {
 }
 
 function getFilteredTracks() {
-  var q = (searchInput ? searchInput.value : "").toLowerCase();
+  var q = (searchInput ? searchInput.value : "").toLowerCase().trim();
   return currentPlaylist
     .map(function (track, idx) { return { track: track, idx: idx }; })
     .filter(function (item) {
       if (!q) return true;
       return item.track.title.toLowerCase().includes(q) || item.track.artist.toLowerCase().includes(q);
     });
+}
+
+function performGlobalSearch() {
+  var q = (globalSearchInput ? globalSearchInput.value : "").toLowerCase().trim();
+  if (!searchResultsContainer) return;
+
+  if (!q) {
+    searchResultsContainer.innerHTML = '<p class="text-slate-400 text-center py-10">Type something to search across all artists...</p>';
+    return;
+  }
+
+  searchResultsContainer.innerHTML = "";
+  var matches = [];
+
+  // Search across all artistsData
+  Object.keys(artistsData).forEach(function (artistKey) {
+    var artist = artistsData[artistKey];
+    artist.tracks.forEach(function (track, trackIdx) {
+      if (track.title.toLowerCase().includes(q) || artist.name.toLowerCase().includes(q)) {
+        matches.push({
+          track: track,
+          artistKey: artistKey,
+          trackIndex: trackIdx,
+          artistName: artist.name
+        });
+      }
+    });
+  });
+
+  if (matches.length === 0) {
+    searchResultsContainer.innerHTML = '<p class="text-slate-400 text-center py-10">No matches found across any artist.</p>';
+    return;
+  }
+
+  matches.forEach(function (m) {
+    var item = document.createElement('div');
+    item.className = "track-row px-4 py-3 rounded-xl cursor-pointer flex items-center justify-between border border-slate-800 bg-slate-900/40 hover:bg-slate-800/60 transition";
+    item.innerHTML = `
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-xs">🎵</div>
+        <div>
+          <p class="text-sm font-semibold text-white">${m.track.title}</p>
+          <p class="text-[11px] text-slate-400">${m.artistName}</p>
+        </div>
+      </div>
+      <button class="text-purple-400 text-xs font-medium px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">Play</button>
+    `;
+    item.onclick = function () {
+      closePage('page-search');
+      openArtist(m.artistKey);
+      // After openArtist, currentPlaylist is updated and first track is loaded.
+      // We want to force load the specific matched track.
+      loadTrack(m.trackIndex, true);
+    };
+    searchResultsContainer.appendChild(item);
+  });
 }
 
 function isFavoriteTrack(track) {
@@ -900,6 +960,9 @@ function renderTracklist() {
             </div>
           </div>
           <div class="flex items-center gap-3">
+            <button data-add-playlist="${idx}" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 hover:bg-purple-600/30 text-slate-400 hover:text-purple-400 transition-colors" title="Add to Playlist">
+              <span class="text-xl text-center flex items-center justify-center" style="margin-top:-2px">+</span>
+            </button>
             <button data-fav="${idx}" class="text-sm ${favActive ? 'text-pink-400' : 'text-slate-400'} hover:text-pink-400">♥</button>
             <button class="text-xl text-slate-400 hover:text-purple-400">⋮</button>
           </div>
@@ -913,6 +976,14 @@ function renderTracklist() {
       toggleFavorite(track);
       renderTracklist();
     });
+
+    var addPlaylistBtn = row.querySelector('button[data-add-playlist]');
+    if (addPlaylistBtn) {
+      addPlaylistBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openPlaylistSelection(track);
+      });
+    }
 
     tracklistContainer.appendChild(row);
   });
@@ -1199,6 +1270,14 @@ function updateGlobalMiniPlayer() {
   gMiniTitle.textContent = track.title;
   gMiniPlayBtn.textContent = isPlaying ? '⏸' : '⏯';
   gMiniPlayer.classList.remove('hidden');
+
+  var gMiniAddBtn = document.getElementById('g-mini-add-playlist');
+  if (gMiniAddBtn) {
+    gMiniAddBtn.onclick = function (e) {
+      e.stopPropagation();
+      openPlaylistSelection(track);
+    };
+  }
 }
 
 function closeMiniPlayer() {
@@ -1496,6 +1575,17 @@ if (muteIcon) {
 
 if (searchInput) {
   searchInput.addEventListener("input", renderTracklist);
+  searchInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") renderTracklist();
+  });
+}
+
+if (playerSearchBtn) {
+  playerSearchBtn.addEventListener("click", renderTracklist);
+}
+
+if (globalSearchInput) {
+  globalSearchInput.addEventListener("input", performGlobalSearch);
 }
 
 document.addEventListener("keydown", function (e) {
@@ -1541,11 +1631,21 @@ document.addEventListener("DOMContentLoaded", function () {
   if (volumeSlider) volumeSlider.value = savedVolume;
   lastVolume = savedVolume;
 
+  // Alphabetical Sorting for all artist tracks
+  Object.keys(artistsData).forEach(function (key) {
+    if (artistsData[key].tracks) {
+      artistsData[key].tracks.sort(function (a, b) {
+        return a.title.localeCompare(b.title);
+      });
+    }
+  });
+
   currentSlide = Math.floor(Math.random() * heroSlides.length);
   initHeroSlideshow();
   filterArtists('all');
   renderFavorites();
   renderRecent();
+  renderUserPlaylists();
   updateAuthUI();
 
   // Ensure initial sidebar state based on screen size
@@ -1614,3 +1714,140 @@ audio.addEventListener('loadstart', function () {
 audio.addEventListener('canplay', function () {
   if (playPauseBtn) playPauseBtn.classList.remove('loading');
 });
+
+/* -------- PLAYLIST MANAGEMENT -------- */
+function openPlaylistSelection(track) {
+  var modal = document.getElementById('modal-playlist-selection');
+  var list = document.getElementById('selection-playlist-list');
+  if (!modal || !list) return;
+
+  list.innerHTML = "";
+  if (userPlaylists.length === 0) {
+    list.innerHTML = '<p class="text-slate-500 text-center py-4 text-xs">No playlists yet.</p>';
+  } else {
+    userPlaylists.forEach(function (pl, index) {
+      var btn = document.createElement('button');
+      btn.className = "w-full text-left p-3 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-between group transition-all";
+      btn.innerHTML = `
+        <span class="text-sm font-medium text-slate-200 group-hover:text-white">${pl.name}</span>
+        <span class="text-[10px] text-slate-500 group-hover:text-slate-300">${pl.tracks.length} tracks</span>
+      `;
+      btn.onclick = function () {
+        addTrackToPlaylist(track, index);
+        closePlaylistSelection();
+      };
+      list.appendChild(btn);
+    });
+  }
+
+  modal.classList.remove('hidden');
+}
+
+function closePlaylistSelection() {
+  var modal = document.getElementById('modal-playlist-selection');
+  if (modal) modal.classList.add('hidden');
+}
+
+function addTrackToPlaylist(track, playlistIndex) {
+  var pl = userPlaylists[playlistIndex];
+  if (!pl) return;
+
+  // Prevent duplicates
+  var exists = pl.tracks.some(function (t) { return t.title === track.title && t.artist === track.artist; });
+  if (exists) {
+    showToast("Song already in playlist!");
+    return;
+  }
+
+  pl.tracks.push(track);
+  localStorage.setItem('neostream_playlists', JSON.stringify(userPlaylists));
+  showToast("Added to " + pl.name);
+  renderUserPlaylists();
+}
+
+function saveNewPlaylist() {
+  var nameInp = document.getElementById('playlist-name');
+  var descInp = document.getElementById('create-playlist-desc');
+  if (!nameInp) return;
+
+  var name = nameInp.value.trim();
+  var desc = descInp ? descInp.value.trim() : "";
+
+  if (!name) {
+    showToast("Please enter a playlist name");
+    return;
+  }
+
+  var newPl = {
+    name: name,
+    desc: desc,
+    tracks: []
+  };
+
+  userPlaylists.push(newPl);
+  localStorage.setItem('neostream_playlists', JSON.stringify(userPlaylists));
+  nameInp.value = "";
+  if (descInp) descInp.value = "";
+
+  showToast("Playlist created!");
+  renderUserPlaylists();
+  switchView('home');
+}
+
+function renderUserPlaylists() {
+  var libContainer = document.getElementById('library-list');
+  if (!libContainer) return;
+
+  libContainer.innerHTML = "";
+  if (userPlaylists.length === 0) {
+    libContainer.innerHTML = '<p class="text-slate-500 text-xs">Your created playlists will appear here.</p>';
+    return;
+  }
+
+  userPlaylists.forEach(function (pl, index) {
+    var card = document.createElement('div');
+    card.className = "p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-purple-500/50 transition-all group";
+    card.innerHTML = `
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="text-sm font-bold text-white">${pl.name}</h4>
+        <button onclick="deletePlaylist(${index})" class="text-slate-500 hover:text-red-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity">Delete</button>
+      </div>
+      <p class="text-[11px] text-slate-400 mb-3 truncate">${pl.desc || 'No description'}</p>
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] text-slate-500">${pl.tracks.length} tracks</span>
+        <button onclick="openUserPlaylist(${index})" class="px-3 py-1.5 rounded-full bg-purple-600/20 text-purple-300 text-[10px] font-bold hover:bg-purple-600 hover:text-white transition-all">Open</button>
+      </div>
+    `;
+    libContainer.appendChild(card);
+  });
+}
+
+function deletePlaylist(index) {
+  if (confirm("Delete this playlist?")) {
+    userPlaylists.splice(index, 1);
+    localStorage.setItem('neostream_playlists', JSON.stringify(userPlaylists));
+    renderUserPlaylists();
+  }
+}
+
+function openUserPlaylist(index) {
+  var pl = userPlaylists[index];
+  if (!pl) return;
+
+  playlistTitleEl.textContent = pl.name;
+  playlistCategoryEl.textContent = 'Custom Playlist';
+  playlistDescEl.textContent = pl.desc || 'A collection of your favorite tracks.';
+
+  var albumPhoto = document.getElementById('album-photo');
+  if (albumPhoto) albumPhoto.src = 'https://placehold.co/600x600/581c87/ffffff?text=' + encodeURIComponent(pl.name);
+
+  currentPlaylist = pl.tracks;
+  currentIndex = 0;
+  if (searchInput) searchInput.value = '';
+
+  renderTracklist();
+  if (currentPlaylist.length > 0) {
+    loadTrack(0, false);
+  }
+  switchView('player');
+}
