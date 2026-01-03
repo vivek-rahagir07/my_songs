@@ -211,7 +211,7 @@ var artistsData = {
     name: "Jubin Nautiyal",
     category: "Bollywood",
     desc: "The soulful king of romantic ballads.",
-    heroImage: "photo/jubin notiyal.jpg",
+    heroImage: "photo/music.jpg",
     gridImage: "photo/jubin notiyal.jpg",
     playerImage: "player/jubin.png",
     tracks: [
@@ -1250,14 +1250,75 @@ function drawVisualizer() {
 
   analyser.getByteFrequencyData(dataArray);
 
-  // Draw only on global mini player canvas
+
+  // Draw on global mini player canvas
   var globalCanvas = document.getElementById('global-visualizer-canvas');
   if (globalCanvas) {
-    drawOnCanvas(globalCanvas, dataArray);
+    drawPremiumVisualizer(globalCanvas, dataArray, true);
+  }
+
+  // Draw on main player canvas
+  var mainCanvas = document.getElementById('main-visualizer-canvas');
+  if (mainCanvas) {
+    drawPremiumVisualizer(mainCanvas, dataArray, false);
   }
 }
 
-function drawOnCanvas(canvas, data) {
+function drawPremiumVisualizer(canvas, data, isMini) {
+  var ctx = canvas.getContext('2d');
+  var WIDTH = canvas.width;
+  var HEIGHT = canvas.height;
+
+  // Clear with fade effect for smooth trails
+  ctx.fillStyle = isMini ? 'rgba(2, 6, 23, 0.4)' : 'rgba(15, 23, 42, 0.2)';
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  // Configuration
+  var barCount = isMini ? 60 : 80; // Number of bars to display
+  var barWidth = (WIDTH / barCount) / 2.2; // Spacing for symmetry
+  var center = WIDTH / 2;
+
+  // Create gradient
+  var gradient = ctx.createLinearGradient(0, HEIGHT, 0, 0);
+  gradient.addColorStop(0, '#ec4899'); // Pink
+  gradient.addColorStop(0.5, '#8b5cf6'); // Purple
+  gradient.addColorStop(1, '#22d3ee'); // Cyan
+
+  ctx.fillStyle = gradient;
+  ctx.shadowBlur = isMini ? 10 : 20;
+  ctx.shadowColor = 'rgba(139, 92, 246, 0.5)';
+
+  for (var i = 0; i < barCount; i++) {
+    // Get frequency value (focus on lower frequencies for better movement)
+    var index = Math.floor(i * (bufferLength / 2) / barCount);
+    var val = data[index];
+
+    // Scale height
+    var barHeight = Math.max((val / 255) * HEIGHT * (isMini ? 0.8 : 0.6), 4);
+
+    // Smooth falloff could be implemented here with a separate state array, 
+    // but for now we'll rely on the high frame rate and analyser smoothing.
+
+    // Draw symmetric bars from center
+    // Right side
+    var xPosR = center + (i * (barWidth + 2));
+    var yPos = HEIGHT - barHeight;
+    ctx.beginPath();
+    ctx.roundRect(xPosR, yPos, barWidth, barHeight, [4, 4, 0, 0]);
+    ctx.fill();
+
+    // Left side
+    var xPosL = center - ((i + 1) * (barWidth + 2));
+    ctx.beginPath();
+    ctx.roundRect(xPosL, yPos, barWidth, barHeight, [4, 4, 0, 0]);
+    ctx.fill();
+  }
+
+  ctx.shadowBlur = 0;
+}
+
+// Deprecated old drawer, kept for reference or fallback if needed
+function drawOnCanvasOld(canvas, data) {
   var ctx = canvas.getContext('2d');
   var WIDTH = canvas.width;
   var HEIGHT = canvas.height;
