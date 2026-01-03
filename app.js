@@ -2035,3 +2035,40 @@ function openUserPlaylist(index) {
   }
   switchView('player');
 }
+
+/* -------- PRELOADER -------- */
+window.addEventListener('load', function () {
+  var preloader = document.getElementById('preloader');
+  var preloaderText = document.getElementById('preloader-text');
+
+  if (preloader) {
+    // Dynamic text updates
+    var texts = [
+      "Initializing Audio Engine...",
+      "Loading High-Fidelity Assets...",
+      "Syncing Cloud Library...",
+      "Authenticating User..."
+    ];
+    var textIndex = 0;
+
+    var textInterval = setInterval(function () {
+      textIndex = (textIndex + 1) % texts.length;
+      if (preloaderText) preloaderText.textContent = texts[textIndex];
+    }, 600);
+
+    // Force minimum 2.5s display time for the premium feel
+    setTimeout(function () {
+      clearInterval(textInterval);
+      if (preloaderText) preloaderText.textContent = "Ready.";
+
+      preloader.classList.add('preloader-hidden');
+
+      // Remove from DOM after transition (700ms matches CSS duration)
+      setTimeout(function () {
+        if (preloader.parentNode) {
+          preloader.parentNode.removeChild(preloader);
+        }
+      }, 700);
+    }, 2500);
+  }
+});

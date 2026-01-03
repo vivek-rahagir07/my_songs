@@ -18,6 +18,59 @@
 
 <body class="text-white">
 
+  <!-- PRELOADER -->
+  <div id="preloader"
+    class="fixed inset-0 z-[100] bg-[#020617] flex flex-col items-center justify-center transition-opacity duration-700 overflow-hidden">
+
+    <!-- Background Elements -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] animate-pulse"></div>
+      <div
+        class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse delay-1000">
+      </div>
+    </div>
+
+    <div class="relative z-10 flex flex-col items-center">
+      <!-- Icon Container -->
+      <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
+        <!-- Spinning Ring -->
+        <div
+          class="absolute inset-0 rounded-full border-2 border-transparent border-t-purple-500 border-r-cyan-500 animate-[spin_1.5s_linear_infinite]">
+        </div>
+        <div
+          class="absolute inset-2 rounded-full border-2 border-transparent border-b-purple-500 border-l-cyan-500 animate-[spin_2s_linear_infinite_reverse]">
+        </div>
+
+        <!-- Music Note Glitch -->
+        <div class="text-4xl animate-bounce relative group">
+          <span class="absolute inset-0 text-cyan-400 blur-[1px] animate-pulse">🎵</span>
+          <span class="relative text-white z-10">🎵</span>
+        </div>
+      </div>
+
+      <!-- Glitch Text -->
+      <h2 class="text-3xl font-black tracking-[0.3em] text-white relative glitch-text" data-text="NEOSTREAM">
+        NEOSTREAM
+      </h2>
+
+      <!-- Visualizer Bars -->
+      <div class="flex items-end gap-1.5 h-8 mt-6">
+        <div class="w-1.5 bg-purple-500 rounded-full animate-[musicWave_0.8s_ease-in-out_infinite]"></div>
+        <div class="w-1.5 bg-cyan-400 rounded-full animate-[musicWave_1.1s_ease-in-out_infinite_0.1s]"></div>
+        <div class="w-1.5 bg-purple-500 rounded-full animate-[musicWave_1.3s_ease-in-out_infinite_0.2s]"></div>
+        <div class="w-1.5 bg-cyan-400 rounded-full animate-[musicWave_0.9s_ease-in-out_infinite_0.3s]"></div>
+        <div class="w-1.5 bg-purple-500 rounded-full animate-[musicWave_1.0s_ease-in-out_infinite_0.4s]"></div>
+      </div>
+
+      <!-- Typewriter Status -->
+      <div class="mt-6 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+        <p id="preloader-text" class="text-xs text-slate-400 font-mono tracking-widest uppercase">Initializing Audio
+          Engine...</p>
+      </div>
+    </div>
+  </div>
+
   <!-- LEFT NAVIGATION BAR -->
   <aside id="left-sidebar"
     class="fixed inset-y-0 left-0 w-60 glass-main border-r border-slate-700/50 z-40 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
