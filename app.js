@@ -1033,7 +1033,7 @@ function initVisualizer() {
     // Create audio context
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
-    analyser.fftSize = 256;
+    analyser.fftSize = 512; // Increased for better resolution
 
     bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
@@ -1069,27 +1069,46 @@ function drawOnCanvas(canvas, data) {
   var WIDTH = canvas.width;
   var HEIGHT = canvas.height;
 
-  // Clear canvas with dark background
-  ctx.fillStyle = 'rgba(2, 6, 23, 0.3)';
+  // Clear canvas with very subtle trail effect
+  ctx.fillStyle = 'rgba(2, 6, 23, 0.4)';
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-  var barWidth = (WIDTH / bufferLength) * 2.5;
-  var barHeight;
+  // Compact bars configuration
+  var barGap = 2;
+  var barWidth = (WIDTH / (bufferLength / 2)) - barGap; // Show only half the frequency range (more relevant)
   var x = 0;
 
-  for (var i = 0; i < bufferLength; i++) {
-    barHeight = (data[i] / 255) * HEIGHT * 0.8;
+  for (var i = 0; i < bufferLength / 2; i++) {
+    var val = data[i];
+    // Dynamic height with a small minimum
+    var barHeight = Math.max((val / 255) * HEIGHT * 0.85, 4);
 
-    // Create gradient for each bar
+    // Create a vibrant gradient for the bar
     var gradient = ctx.createLinearGradient(0, HEIGHT - barHeight, 0, HEIGHT);
-    gradient.addColorStop(0, 'rgba(139, 92, 246, 0.8)'); // Purple
-    gradient.addColorStop(0.5, 'rgba(34, 211, 238, 0.6)'); // Cyan
-    gradient.addColorStop(1, 'rgba(236, 72, 153, 0.4)'); // Pink
+    gradient.addColorStop(0, '#a855f7'); // Purple-500
+    gradient.addColorStop(0.6, '#06b6d4'); // Cyan-500
+    gradient.addColorStop(1, '#ec4899'); // Pink-500
 
     ctx.fillStyle = gradient;
-    ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
 
-    x += barWidth + 1;
+    // Add glowing shadow for a "real" digital feeling
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = 'rgba(139, 92, 246, 0.5)';
+
+    // Draw pill-shaped bar
+    var radius = barWidth / 2;
+    var xPos = x;
+    var yPos = HEIGHT - barHeight;
+
+    // Draw using rounded rect path
+    ctx.beginPath();
+    ctx.roundRect(xPos, yPos, barWidth, barHeight, [radius, radius, 0, 0]);
+    ctx.fill();
+
+    // Reset shadow for next bars or other drawing
+    ctx.shadowBlur = 0;
+
+    x += barWidth + barGap;
   }
 }
 
